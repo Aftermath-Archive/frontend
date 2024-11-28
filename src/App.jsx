@@ -12,6 +12,8 @@ function App() {
 
             <h2 className='text-xl'>Shadcn UI test</h2>
             <Button>click me! (i do nothing)</Button>
+
+            <p>test!</p>
         </>
     );
 }

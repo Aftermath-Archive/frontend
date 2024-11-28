@@ -1,48 +1,50 @@
-import js from "@eslint/js";
-import react from "eslint-plugin-react";
-import prettier from "eslint-config-prettier";
+import js from '@eslint/js';
+import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
 export default [
-  // Base ESLint configuration
-  js.configs.recommended,
+    js.configs.recommended,
+    reactRecommended,
+    {
+        files: ['**/*.{js,jsx}'],
+        languageOptions: {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+            globals: {
+                ...globals.browser,
+                ...globals.es2021,
+            },
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true,
+                },
+            },
+        },
+        plugins: {
+            'react-hooks': reactHooks,
+        },
+        rules: {
+            // React Hooks rules
+            'react-hooks/rules-of-hooks': 'error',
+            'react-hooks/exhaustive-deps': 'warn',
 
-  // Node.js and Browser environments
-  {
-    languageOptions: {
-      ecmaVersion: 2021, // Modern JavaScript syntax
-      sourceType: "module", // Enable ES Modules
-    },
-    // env: {
-    //   node: true, // Enable Node.js global variables
-    //   browser: true, // Enable Browser global variables
-    //   es2021: true, // Include ES2021 features
-    // },
-  },
+            // Common JavaScript rules
+            'no-unused-vars': 'warn',
+            'no-console': ['warn', { allow: ['warn', 'error'] }],
+            'no-undef': 'warn',
 
-  // React plugin configuration
-  {
-    plugins: {
-      react,
-    },
-    settings: {
-      react: {
-        version: "detect", 
-      },
-    },
-    rules: {
-      ...react.configs.recommended.rules,
-      ...react.configs["jsx-runtime"].rules,
-    },
-  },
+            // React specific rules
+            'react/react-in-jsx-scope': 'off',
+            'react/prop-types': 'off',
 
-  // Prettier integration to disable conflicting ESLint rules
-  prettier,
-
-  // Additional custom rules
-  {
-    rules: {
-      "no-unused-vars": "warn", // Warn about unused variables
-      "no-undef": "off", // Disable errors for Node.js globals
+            // TailwindCSS specific (minimal interference)
+            'max-len': 'off', // Disable line length restrictions for Tailwind classes
+        },
+        settings: {
+            react: {
+                version: 'detect',
+            },
+        },
     },
-  },
 ];

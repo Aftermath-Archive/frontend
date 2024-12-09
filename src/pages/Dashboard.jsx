@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout/Layout';
 
-export function DashboardPage() {
+export default function DashboardPage() {
     return (
         <Layout>
             <div className="flex flex-1 flex-col gap-4 p-4">

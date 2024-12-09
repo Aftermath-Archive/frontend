@@ -4,14 +4,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 // Pages import
-import HomePage from '@/pages/Homepage';
-import { DashboardPage } from '@/pages/Dashboard';
+import LandingPage from '@/pages/LandingPage';
+import DashboardPage from '@/pages/Dashboard';
 import ErrorPage from '@/pages/ErrorPage';
 
 const appRouter = createBrowserRouter([
     {
         path: '/',
-        element: <HomePage />,
+        element: <LandingPage />,
     },
     {
         path: '/dashboard',

@@ -25,8 +25,11 @@ export default function Features() {
                                 </p>
                                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
                                     Deploy on your own servers and
-                                    infrastructure for full control over your
-                                    data. Your tools on your terms.
+                                    infrastructure for{' '}
+                                    <strong>
+                                        full control over your data.
+                                    </strong>{' '}
+                                    Your tools on your terms.
                                 </p>
                             </div>
                             <div className="relative min-h-[30rem] w-full grow [container-type:inline-size] max-lg:mx-auto max-lg:max-w-sm">
@@ -48,7 +51,8 @@ export default function Features() {
                                 </p>
                                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
                                     Transparent, auditable, and
-                                    community-driven. The code is yours to
+                                    community-driven.{' '}
+                                    <strong>The code is yours</strong> to
                                     inspect, modify, and enhance to meet your
                                     specific needs.
                                 </p>
@@ -73,7 +77,8 @@ export default function Features() {
                                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
                                     A streamlined design that gets out of your
                                     way, so you can focus on incident management
-                                    and post-mortems. No experiments needed.
+                                    and post-mortems.{' '}
+                                    <strong>No experiments needed.</strong>
                                 </p>
                             </div>
                             <div className="flex flex-1 items-center justify-center px-8 max-lg:pb-12 max-lg:pt-10 sm:px-10 lg:pb-2">
@@ -95,9 +100,11 @@ export default function Features() {
                                 </p>
                                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
                                     Easily add new features or integrate
-                                    Aftermath Archive with your existing tools
-                                    and workflows. Adapt the platform to grow
-                                    with your needs.
+                                    Aftermath Archive with your{' '}
+                                    <strong>
+                                        existing tools and workflows.
+                                    </strong>{' '}
+                                    Adapt the platform to grow with your needs.
                                 </p>
                             </div>
                             <div className="relative min-h-[30rem] w-full grow [container-type:inline-size] max-lg:mx-auto max-lg:max-w-sm">

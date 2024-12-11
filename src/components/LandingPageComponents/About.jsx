@@ -19,14 +19,27 @@ export default function About() {
                                         Aftermath Archive
                                     </h2>
                                     <p className="text-xl text-muted-foreground mt-4">
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna
-                                        aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris
-                                        nisi ut aliquip ex ea commodo consequat.
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit.
+                                        <strong>Aftermath Archive</strong> is
+                                        your go-to platform for incident
+                                        management and post-mortems. Designed to
+                                        help teams{' '}
+                                        <strong>
+                                            respond, analyze, and learn{' '}
+                                        </strong>{' '}
+                                        from incidents, it provides a
+                                        streamlined approach to managing
+                                        disruptions and improving system
+                                        reliability.
+                                    </p>
+                                    <p className="text-xl text-muted-foreground mt-4">
+                                        Stay organized with powerful tools for
+                                        tracking incidents, documenting
+                                        resolutions, and generating actionable
+                                        insights. Whether you’re handling a
+                                        critical outage or refining your
+                                        operations, Aftermath Archive empowers
+                                        you to turn incidents into opportunities
+                                        for growth and resilience.
                                     </p>
                                 </div>
                             </div>

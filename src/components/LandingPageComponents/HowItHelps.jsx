@@ -1,54 +1,60 @@
 import {
-    ArrowPathIcon,
-    CloudArrowUpIcon,
-    FingerPrintIcon,
+    RocketLaunchIcon,
+    ChartBarIcon,
     LockClosedIcon,
+    WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
 
 const features = [
     {
-        name: 'Push to deploy',
+        name: 'Rapid Incident Response',
         description:
-            'Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi. Odio urna massa nunc massa.',
-        icon: CloudArrowUpIcon,
+            'Stay on top of disruptions with a quick and organized way to log, track, and resolve incidents. Minimize downtime and keep your team aligned.',
+        icon: RocketLaunchIcon,
     },
     {
-        name: 'SSL certificates',
+        name: 'Secure and Reliable Data',
         description:
-            'Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget. Sem sodales gravida quam turpis enim lacus amet.',
+            'Protect your incident data with robust security features and ensure your information remains accurate, up-to-date, and accessible.',
         icon: LockClosedIcon,
     },
     {
-        name: 'Simple queues',
+        name: 'Actionable Insights',
         description:
-            'Quisque est vel vulputate cursus. Risus proin diam nunc commodo. Lobortis auctor congue commodo diam neque.',
-        icon: ArrowPathIcon,
+            'Generate meaningful post-mortems and analytics to identify patterns, learn from past incidents, and continually improve your processes.',
+        icon: ChartBarIcon,
     },
     {
-        name: 'Advanced security',
+        name: 'Customizable Workflows',
         description:
-            'Arcu egestas dolor vel iaculis in ipsum mauris. Tincidunt mattis aliquet hac quis. Id hac maecenas ac donec pharetra eget.',
-        icon: FingerPrintIcon,
+            'Adapt the tool to your team’s workflow with flexible configurations and intuitive controls. Designed to work with you, not against you.',
+        icon: WrenchScrewdriverIcon,
     },
 ];
 
-export default function HowItWorks() {
+export default function HowItHelps() {
     return (
         <section id="how-it-works">
             <div className="bg-white py-24 sm:py-32">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-2xl lg:text-center">
-                        <h2 className="text-base/7 font-semibold text-indigo-600">
+                        <h2 className="text-base/7 font-semibold text-teal-600">
                             How it helps
                         </h2>
                         <p className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl lg:text-balance">
-                            Everything you need to make your app more robust
+                            Everything you need to manage incidents effectively
                         </p>
                         <p className="mt-6 text-lg/8 text-gray-600">
-                            Quis tellus eget adipiscing convallis sit sit eget
-                            aliquet quis. Suspendisse eget egestas a elementum
-                            pulvinar et feugiat blandit at. In mi viverra elit
-                            nunc.
+                            <strong>Aftermath Archive</strong> equips you with
+                            the essential tools to{' '}
+                            <strong>
+                                streamline incident management, conduct
+                                insightful post-mortems, and enhance system
+                                reliability.
+                            </strong>{' '}
+                            Whether you’re responding to an outage or analyzing
+                            historical incidents, these features make the
+                            process seamless and effective:
                         </p>
                     </div>
                     <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
@@ -59,7 +65,7 @@ export default function HowItWorks() {
                                     className="relative pl-16"
                                 >
                                     <dt className="text-base/7 font-semibold text-gray-900">
-                                        <div className="absolute left-0 top-0 flex size-10 items-center justify-center rounded-lg bg-indigo-600">
+                                        <div className="absolute left-0 top-0 flex size-10 items-center justify-center rounded-lg bg-teal-600">
                                             <feature.icon
                                                 aria-hidden="true"
                                                 className="size-6 text-white"

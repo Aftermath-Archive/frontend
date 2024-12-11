@@ -1,7 +1,7 @@
 import About from '@/components/LandingPageComponents/About';
 import CTA from '@/components/LandingPageComponents/CTA';
 import AccordionFAQ from '@/components/LandingPageComponents/Faq';
-import HowItWorks from '@/components/LandingPageComponents/HowItWorks';
+import HowItHelps from '@/components/LandingPageComponents/HowItHelps';
 import Footer from '@/components/Footer/Footer';
 import HeaderMenu from '@/components/LandingPageComponents/HeaderMenu';
 import Hero from '@/components/LandingPageComponents/Hero';
@@ -13,7 +13,7 @@ export default function LandingPage() {
             <HeaderMenu />
             <Hero />
             <About />
-            <HowItWorks />
+            <HowItHelps />
             <Features />
             <CTA />
             <AccordionFAQ />

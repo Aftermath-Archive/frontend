@@ -9,6 +9,7 @@ import DashboardPage from '@/pages/Dashboard';
 import ErrorPage from '@/pages/ErrorPage';
 import DevPage from '@/pages/Dev';
 import RegisterPage from '@/pages/RegisterPage';
+import LoginPage from '@/pages/LoginPage';
 
 const appRouter = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const appRouter = createBrowserRouter([
     {
         path: '/auth/register',
         element: <RegisterPage />,
+    },
+    {
+        path: '/auth/login',
+        element: <LoginPage />,
     },
     {
         path: '*', // Catch-all for unmatched routes (404)

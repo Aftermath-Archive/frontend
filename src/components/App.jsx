@@ -7,22 +7,15 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LandingPage from '@/pages/LandingPage';
 import DashboardPage from '@/pages/Dashboard';
 import ErrorPage from '@/pages/ErrorPage';
-import DevPage from '@/pages/Dev';
 import RegisterPage from '@/pages/RegisterPage';
 import LoginPage from '@/pages/LoginPage';
+import ProtectedRoute from './Auth/ProtectedRoute';
 
 const appRouter = createBrowserRouter([
+    // Public routes
     {
         path: '/',
         element: <LandingPage />,
-    },
-    {
-        path: '/dashboard',
-        element: <DashboardPage />,
-    },
-    {
-        path: '/dev',
-        element: <DevPage />,
     },
     {
         path: '/auth/register',
@@ -32,8 +25,18 @@ const appRouter = createBrowserRouter([
         path: '/auth/login',
         element: <LoginPage />,
     },
+    // Protected routes requiring login
     {
-        path: '*', // Catch-all for unmatched routes (404)
+        element: <ProtectedRoute />, // Parent wrapper
+        children: [
+            {
+                path: '/dashboard',
+                element: <DashboardPage />,
+            },
+        ],
+    },
+    {
+        path: '*',
         element: <ErrorPage />,
     },
 ]);

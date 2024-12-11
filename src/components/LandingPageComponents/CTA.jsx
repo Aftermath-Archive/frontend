@@ -24,12 +24,14 @@ export default function CTA() {
                     </svg>
                     <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
                         <h2 className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                            Boost your productivity. Start using our app today.
+                            Boost Your Productivity. Take Control of Your
+                            Incident Workflow.
                         </h2>
                         <p className="mt-6 text-pretty text-lg/8 text-gray-300">
-                            Ac euismod vel sit maecenas id pellentesque eu sed
-                            consectetur. Malesuada adipiscing sagittis vel
-                            nulla.
+                            Unlock streamlined incident management and efficient
+                            post-mortems with Aftermath Archive. Empower your
+                            team to respond faster, learn from incidents, and
+                            continuously improve system reliability.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
                             <a
@@ -38,14 +40,10 @@ export default function CTA() {
                             >
                                 Get started
                             </a>
-                            <a
-                                href="#"
-                                className="text-sm/6 font-semibold text-white"
-                            >
-                                Learn more <span aria-hidden="true">→</span>
-                            </a>
                         </div>
                     </div>
+                    {/* TO DO */}
+                    {/* UPDATE SCREENSHOT WITH IN APP SCREENSHOT */}
                     <div className="relative mt-16 h-80 lg:mt-8">
                         <img
                             alt="App screenshot"

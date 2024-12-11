@@ -4,10 +4,10 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function HeaderMenu() {
     const navigation = [
-        { name: 'Product', href: '#' },
-        { name: 'Features', href: '#' },
-        { name: 'Marketplace', href: '#' },
-        { name: 'Company', href: '#' },
+        { name: 'About', href: '#about' },
+        { name: 'Benefits', href: '#how-it-helps' },
+        { name: 'Features', href: '#features' },
+        { name: 'FAQ', href: '#faq' },
     ];
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     return (

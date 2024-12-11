@@ -34,7 +34,7 @@ const features = [
 
 export default function HowItHelps() {
     return (
-        <section id="how-it-works">
+        <section id="how-it-helps">
             <div className="bg-white py-24 sm:py-32">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-2xl lg:text-center">

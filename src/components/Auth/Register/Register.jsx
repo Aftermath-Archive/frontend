@@ -39,7 +39,7 @@ export default function Register() {
     };
 
     return (
-        <Card className=" max-w-sm">
+        <Card className="">
             <CardHeader>
                 <CardTitle className="text-2xl">Register</CardTitle>
                 <CardDescription>Create your account</CardDescription>

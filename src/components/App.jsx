@@ -7,18 +7,36 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LandingPage from '@/pages/LandingPage';
 import DashboardPage from '@/pages/Dashboard';
 import ErrorPage from '@/pages/ErrorPage';
+import RegisterPage from '@/pages/RegisterPage';
+import LoginPage from '@/pages/LoginPage';
+import ProtectedRoute from './Auth/ProtectedRoute';
 
 const appRouter = createBrowserRouter([
+    // Public routes
     {
         path: '/',
         element: <LandingPage />,
     },
     {
-        path: '/dashboard',
-        element: <DashboardPage />,
+        path: '/auth/register',
+        element: <RegisterPage />,
     },
     {
-        path: '*', // Catch-all for unmatched routes (404)
+        path: '/auth/login',
+        element: <LoginPage />,
+    },
+    // Protected routes requiring login
+    {
+        element: <ProtectedRoute />, // Parent wrapper
+        children: [
+            {
+                path: '/dashboard',
+                element: <DashboardPage />,
+            },
+        ],
+    },
+    {
+        path: '*',
         element: <ErrorPage />,
     },
 ]);

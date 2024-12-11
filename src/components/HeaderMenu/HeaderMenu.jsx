@@ -17,7 +17,7 @@ export default function HeaderMenu() {
                 className="flex items-center justify-between pt-6 pl-6 pr-6 lg:px-8"
             >
                 <div className="flex items-center gap-3 flex-grow">
-                    <a href="#" className="-m-1.5 p-1.5">
+                    <a href="/" className="-m-1.5 p-1.5">
                         <span className="sr-only">Aftermath Archive</span>
                         <img
                             alt="Aftermath Archive Logo"

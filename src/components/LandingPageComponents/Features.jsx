@@ -8,17 +8,25 @@ export default function Features() {
                 <p className="mx-auto mt-2 max-w-lg text-balance text-center text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
                     Designed for Flexibility, Control, and Open-Source Freedom
                 </p>
+                <p className="mt-6 text-lg/8 text-gray-600">
+                    <strong>Aftermath Archive</strong> gives you the freedom to{' '}
+                    <strong>own your incident management process.</strong> With
+                    open-source flexibility, self-hosting options, and an
+                    efficient design, you stay in control of your tools and
+                    data.
+                </p>
                 <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
                     <div className="relative lg:row-span-2">
                         <div className="absolute inset-px rounded-lg bg-white lg:rounded-l-[2rem]"></div>
                         <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
                             <div className="px-8 pb-3 pt-8 sm:px-10 sm:pb-0 sm:pt-10">
                                 <p className="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
-                                    Mobile friendly
+                                    Ready for Self-Hosting
                                 </p>
                                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
-                                    Anim aute id magna aliqua ad ad non deserunt
-                                    sunt. Qui irure qui lorem cupidatat commodo.
+                                    Deploy on your own servers and
+                                    infrastructure for full control over your
+                                    data. Your tools on your terms.
                                 </p>
                             </div>
                             <div className="relative min-h-[30rem] w-full grow [container-type:inline-size] max-lg:mx-auto max-lg:max-w-sm">
@@ -39,8 +47,10 @@ export default function Features() {
                                     Free for you. Forever.
                                 </p>
                                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
-                                    Lorem ipsum, dolor sit amet consectetur
-                                    adipisicing elit maiores impedit.
+                                    Transparent, auditable, and
+                                    community-driven. The code is yours to
+                                    inspect, modify, and enhance to meet your
+                                    specific needs.
                                 </p>
                             </div>
                             <div className="flex flex-1 items-center justify-center px-8 max-lg:pb-12 max-lg:pt-10 sm:px-10 lg:pb-2">
@@ -58,11 +68,12 @@ export default function Features() {
                         <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
                             <div className="px-8 pt-8 sm:px-10 sm:pt-10">
                                 <p className="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
-                                    Intuitive user interface
+                                    Lightweight and Efficient
                                 </p>
                                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
-                                    Morbi viverra dui mi arcu sed. Tellus semper
-                                    adipiscing suspendisse semper morbi.
+                                    A streamlined design that gets out of your
+                                    way, so you can focus on incident management
+                                    and post-mortems. No experiments needed.
                                 </p>
                             </div>
                             <div className="flex flex-1 items-center justify-center px-8 max-lg:pb-12 max-lg:pt-10 sm:px-10 lg:pb-2">
@@ -80,12 +91,13 @@ export default function Features() {
                         <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]">
                             <div className="px-8 pb-3 pt-8 sm:px-10 sm:pb-0 sm:pt-10">
                                 <p className="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
-                                    Powerful Insights
+                                    Extensible and Customizable
                                 </p>
                                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
-                                    Sit quis amet rutrum tellus ullamcorper
-                                    ultricies libero dolor eget sem sodales
-                                    gravida.
+                                    Easily add new features or integrate
+                                    Aftermath Archive with your existing tools
+                                    and workflows. Adapt the platform to grow
+                                    with your needs.
                                 </p>
                             </div>
                             <div className="relative min-h-[30rem] w-full grow [container-type:inline-size] max-lg:mx-auto max-lg:max-w-sm">

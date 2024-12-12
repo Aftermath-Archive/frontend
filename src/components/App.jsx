@@ -10,6 +10,8 @@ import ErrorPage from '@/pages/ErrorPage';
 import RegisterPage from '@/pages/RegisterPage';
 import LoginPage from '@/pages/LoginPage';
 import ProtectedRoute from './Auth/ProtectedRoute';
+import CreateIncidentPage from '@/pages/CreateIncident';
+import ViewAndEditIncidentPage from '@/pages/ViewAndEditIncident';
 
 const appRouter = createBrowserRouter([
     // Public routes
@@ -32,6 +34,14 @@ const appRouter = createBrowserRouter([
             {
                 path: '/dashboard',
                 element: <DashboardPage />,
+            },
+            {
+                path: '/incident',
+                element: <CreateIncidentPage />,
+            },
+            {
+                path: '/incident-view',
+                element: <ViewAndEditIncidentPage />,
             },
         ],
     },

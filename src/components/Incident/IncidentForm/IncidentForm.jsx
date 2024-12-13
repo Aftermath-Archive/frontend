@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import {
     Form,
     FormField,
@@ -21,32 +22,42 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 import { createIncident } from '../incident';
 import { incidentSchema } from '../incidentSchema';
 
-export default function CreateIncidentForm() {
+export default function IncidentForm({ initialData = {}, mode = 'create' }) {
     const navigate = useNavigate();
-    const [links, setLinks] = useState([]);
-    const [tags, setTags] = useState([]);
+    const [links, setLinks] = useState(initialData.relatedLinks || []);
+    const [tags, setTags] = useState(initialData.tags || []);
 
     const form = useForm({
         resolver: zodResolver(incidentSchema),
         defaultValues: {
-            title: '',
-            description: '',
-            severity: 'Low',
-            environment: 'Production',
-            affectedSystems: '',
-            impactSummary: '',
-            stepsToReproduce: '',
-            assignedTo: '',
-            tags: [],
-            relatedLinks: [],
-            relatedIncidents: [],
+            title: initialData.title || '',
+            description: initialData.description || '',
+            severity: initialData.severity || 'Low',
+            environment: initialData.environment || 'Production',
+            affectedSystems: initialData.affectedSystems || '',
+            impactSummary: initialData.impactSummary || '',
+            stepsToReproduce: initialData.stepsToReproduce || '',
+            assignedTo: initialData.assignedTo || '',
+            tags: initialData.tags || [],
+            relatedLinks: initialData.relatedLinks || [],
+            relatedIncidents: initialData.relatedIncidents || [],
+            status: initialData.status || 'Open',
+            resolutionDetails: initialData.resolutionDetails || '',
+            resolvedAt: initialData.resolvedAt || '',
         },
     });
+
+    // Update form fields when initialData changes
+    useEffect(() => {
+        form.reset(initialData);
+        setLinks(initialData.relatedLinks || []);
+        setTags(initialData.tags || []);
+    }, [initialData, form]);
 
     // Handler for parsing links
     const handleLinkInputChange = (e) => {
@@ -71,7 +82,7 @@ export default function CreateIncidentForm() {
     };
 
     // Submit handler
-    const [userJwt, setUserJwt] = useUserAuthContext();
+    const [userJwt] = useUserAuthContext();
 
     const onSubmit = async (data) => {
         try {
@@ -80,14 +91,17 @@ export default function CreateIncidentForm() {
                 relatedLinks: links,
                 tags: tags,
             };
-            console.log(payload);
 
             await createIncident(payload, userJwt);
-            toast.success('Incident created successfully!');
+            toast.success(
+                mode === 'edit'
+                    ? 'Incident updated successfully!'
+                    : 'Incident created successfully!'
+            );
             navigate('/dashboard');
         } catch (error) {
-            console.error('Error creating incident:', error);
-            toast.error('Failed to create incident.');
+            console.error('Error saving data:', error);
+            toast.error('Failed to save data.');
         }
     };
 
@@ -97,7 +111,12 @@ export default function CreateIncidentForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-4 p-4"
             >
-                <h2 className="text-2xl font-semibold">Create New Incident</h2>
+                <h1 className="text-2xl font-bold">
+                    {mode === 'edit' &&
+                        `Incident ID: ${form.getValues('incidentAutoId')}`}
+                </h1>
+                <Separator />
+
                 <h3 className="font-bold">Core Details</h3>
 
                 <div className="grid gap-4">
@@ -120,7 +139,6 @@ export default function CreateIncidentForm() {
                             )}
                         />
                     </div>
-                    {/* incident auto ID is generated on submission */}
                     <div className="grid gap-2">
                         {/* Incident Description */}
                         <FormField
@@ -141,9 +159,10 @@ export default function CreateIncidentForm() {
                         />
                     </div>
                 </div>
+                <Separator />
 
                 <h3 className="font-bold">Impact</h3>
-                <div className="grid md:grid-cols-2 gap-2">
+                <div className="grid md:grid-cols-2 gap-4">
                     <div className="grid gap-2">
                         {/* Severity Level */}
                         <FormField
@@ -218,9 +237,9 @@ export default function CreateIncidentForm() {
                 </div>
 
                 {/* created by field passed by JWT */}
-
+                <Separator />
                 <h3 className="font-bold">Scope</h3>
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                     <div className="grid gap-2">
                         {/* Affected Systems */}
                         <FormField
@@ -260,9 +279,10 @@ export default function CreateIncidentForm() {
                         />
                     </div>
                 </div>
+                <Separator />
 
                 <h3 className="font-bold">Supporting Information</h3>
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                     <div className="grid gap-2">
                         {/* Steps to reproduce */}
                         <FormField
@@ -347,6 +367,89 @@ export default function CreateIncidentForm() {
                         </div>
                     </div>
                 </div>
+                {/* Conditional Fields for Edit Mode */}
+                {mode === 'edit' && (
+                    <>
+                        <Separator />
+
+                        <h3 className="font-bold">Current Status</h3>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                {/* Incident Status */}
+                                <FormField
+                                    control={form.control}
+                                    name="status"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Incident Status
+                                            </FormLabel>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                            >
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select status" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="Open">
+                                                        Open
+                                                    </SelectItem>
+                                                    <SelectItem value="In Progress">
+                                                        In Progress
+                                                    </SelectItem>
+                                                    <SelectItem value="Resolved">
+                                                        Resolved
+                                                    </SelectItem>
+                                                    <SelectItem value="Closed">
+                                                        Closed
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                {/* Resolution Details field - only visible if status is closed or resolved */}
+                                {form.watch('status') === 'Resolved' ||
+                                form.watch('status') === 'Closed' ? (
+                                    <FormField
+                                        control={form.control}
+                                        name="resolutionDetails"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    Resolution Details
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        placeholder="Describe the resolution"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                ) : null}
+                            </div>
+                            <div className="grid gap-2">
+                                <FormLabel>Resolved At</FormLabel>
+                                <p className="text-sm">
+                                    {form.getValues('resolvedAt')
+                                        ? new Date(
+                                              form.getValues('resolvedAt')
+                                          ).toLocaleString()
+                                        : 'N/A'}
+                                </p>
+                            </div>
+                        </div>
+                    </>
+                )}
 
                 {/* Submit Button */}
                 <Button
@@ -355,8 +458,12 @@ export default function CreateIncidentForm() {
                     disabled={form.formState.isSubmitting}
                 >
                     {form.formState.isSubmitting
-                        ? 'Creating incident...'
-                        : 'Submit'}
+                        ? mode === 'edit'
+                            ? 'Updating...'
+                            : 'Creating...'
+                        : mode === 'edit'
+                          ? 'Update Incident'
+                          : 'Create Incident'}
                 </Button>
             </form>
         </Form>

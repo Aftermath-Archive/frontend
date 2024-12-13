@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -29,67 +29,90 @@ import { incidentSchema } from '../incidentSchema';
 
 export default function IncidentForm({ initialData = {}, mode = 'create' }) {
     const navigate = useNavigate();
-    const [links, setLinks] = useState(initialData.relatedLinks || []);
-    const [tags, setTags] = useState(initialData.tags || []);
+    const [userJwt] = useUserAuthContext();
 
     const form = useForm({
         resolver: zodResolver(incidentSchema),
         defaultValues: {
-            title: initialData.title || '',
-            description: initialData.description || '',
-            severity: initialData.severity || 'Low',
-            environment: initialData.environment || 'Production',
-            affectedSystems: initialData.affectedSystems || '',
-            impactSummary: initialData.impactSummary || '',
-            stepsToReproduce: initialData.stepsToReproduce || '',
-            assignedTo: initialData.assignedTo || '',
-            tags: initialData.tags || [],
-            relatedLinks: initialData.relatedLinks || [],
-            relatedIncidents: initialData.relatedIncidents || [],
-            status: initialData.status || 'Open',
-            resolutionDetails: initialData.resolutionDetails || '',
-            resolvedAt: initialData.resolvedAt || '',
+            title: '',
+            description: '',
+            severity: 'Low',
+            environment: 'Production',
+            affectedSystems: '',
+            impactSummary: '',
+            stepsToReproduce: '',
+            assignedTo: '',
+            tags: [],
+            relatedLinks: [],
+            relatedIncidents: [],
+            status: 'Open',
+            resolutionDetails: '',
         },
     });
 
-    // Update form fields when initialData changes
-    useEffect(() => {
-        form.reset(initialData);
-        setLinks(initialData.relatedLinks || []);
-        setTags(initialData.tags || []);
-    }, [initialData, form]);
+    // Separate state variables for input strings
+    const [tagsInput, setTagsInput] = useState(
+        initialData.tags ? initialData.tags.join(', ') : ''
+    );
+    const [linksInput, setLinksInput] = useState(
+        initialData.relatedLinks ? initialData.relatedLinks.join(', ') : ''
+    );
 
-    // Handler for parsing links
-    const handleLinkInputChange = (e) => {
-        const value = e.target.value;
-        const linkArray = value
+    // Helper functions to convert between array and string
+    const arrayToString = (arr) =>
+        arr && arr.length > 0 ? arr.join(', ') : '';
+    const stringToArray = (str) =>
+        str
             .split(/[\n,]+/)
-            .map((link) => link.trim())
-            .filter((link) => link !== '');
-        setLinks(linkArray);
-        form.setValue('relatedLinks', linkArray);
+            .map((item) => item.trim())
+            .filter((item) => item !== '');
+
+    // Update form fields only in EDIT mode when initialData changes
+    useEffect(() => {
+        if (mode === 'edit') {
+            form.reset({
+                title: initialData.title || '',
+                description: initialData.description || '',
+                severity: initialData.severity || 'Low',
+                environment: initialData.environment || 'Production',
+                affectedSystems: initialData.affectedSystems || '',
+                impactSummary: initialData.impactSummary || '',
+                stepsToReproduce: initialData.stepsToReproduce || '',
+                assignedTo: initialData.assignedTo || '',
+                tags: initialData.tags || [],
+                relatedLinks: initialData.relatedLinks || [],
+                relatedIncidents: initialData.relatedIncidents || [],
+                status: initialData.status || 'Open',
+                resolutionDetails: initialData.resolutionDetails || '',
+            });
+
+            // Initialize input strings based on initialData
+            setTagsInput(arrayToString(initialData.tags));
+            setLinksInput(arrayToString(initialData.relatedLinks));
+        }
+    }, [initialData, mode, form]);
+
+    // Handlers for input changes
+    const handleTagsChange = (e) => {
+        const inputValue = e.target.value;
+        setTagsInput(inputValue);
+        const tagsArray = stringToArray(inputValue);
+        form.setValue('tags', tagsArray);
     };
 
-    // Handler for parsing tags
-    const handleTagInputChange = (e) => {
-        const value = e.target.value;
-        const tagArray = value
-            .split(/[\n,]+/)
-            .map((tag) => tag.trim())
-            .filter((tag) => tag !== '');
-        setTags(tagArray);
-        form.setValue('tags', tagArray);
+    const handleLinksChange = (e) => {
+        const inputValue = e.target.value;
+        setLinksInput(inputValue);
+        const linksArray = stringToArray(inputValue);
+        form.setValue('relatedLinks', linksArray);
     };
 
     // Submit handler
-    const [userJwt] = useUserAuthContext();
-
     const onSubmit = async (data) => {
         try {
             const payload = {
                 ...data,
-                relatedLinks: links,
-                tags: tags,
+                // 'tags' and 'relatedLinks' are already arrays
             };
 
             await createIncident(payload, userJwt);
@@ -115,71 +138,68 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
                     {mode === 'edit' &&
                         `Incident ID: ${form.getValues('incidentAutoId')}`}
                 </h1>
-                <Separator />
 
-                <h3 className="font-bold">Core Details</h3>
+                {/* Core Details */}
+                <SectionTitle title="Core Details" />
 
                 <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        {/* Incident Title */}
-                        <FormField
-                            control={form.control}
-                            name="title"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Incident Title</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter a brief descriptive title of the incident"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        {/* Incident Description */}
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Incident Description</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="Describe the incident"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                    {/* Incident Title */}
+                    <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Incident Title</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Enter a brief descriptive title"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* Incident Description */}
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Incident Description</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        placeholder="Describe the incident"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
+
                 <Separator />
 
-                <h3 className="font-bold">Impact</h3>
+                {/* Impact */}
+                <SectionTitle title="Impact" />
                 <div className="grid md:grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                        {/* Severity Level */}
-                        <FormField
-                            control={form.control}
-                            name="severity"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Severity Level</FormLabel>
+                    {/* Severity Level */}
+                    <FormField
+                        control={form.control}
+                        name="severity"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Severity Level</FormLabel>
+                                <FormControl>
                                     <Select
                                         onValueChange={field.onChange}
-                                        defaultValue={field.value}
+                                        value={field.value}
                                     >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select severity" />
-                                            </SelectTrigger>
-                                        </FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select severity" />
+                                        </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="Low">
                                                 Low
@@ -195,28 +215,27 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        {/* Incident Environment */}
-                        <FormField
-                            control={form.control}
-                            name="environment"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Incident Environment</FormLabel>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* Incident Environment */}
+                    <FormField
+                        control={form.control}
+                        name="environment"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Incident Environment</FormLabel>
+                                <FormControl>
                                     <Select
                                         onValueChange={field.onChange}
-                                        defaultValue={field.value}
+                                        value={field.value}
                                     >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select environment" />
-                                            </SelectTrigger>
-                                        </FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select environment" />
+                                        </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="Production">
                                                 Production
@@ -229,170 +248,145 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
 
-                {/* created by field passed by JWT */}
+                {/* Scope */}
                 <Separator />
-                <h3 className="font-bold">Scope</h3>
+                <SectionTitle title="Scope" />
                 <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        {/* Affected Systems */}
-                        <FormField
-                            control={form.control}
-                            name="affectedSystems"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Affected Systems</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="What systems does this impact?"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        {/* Impact Summary */}
-                        <FormField
-                            control={form.control}
-                            name="impactSummary"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Impact Summary</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="What is the impact on the system?"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                    {/* Affected Systems */}
+                    <FormField
+                        control={form.control}
+                        name="affectedSystems"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Affected Systems</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="What systems does this impact?"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* Impact Summary */}
+                    <FormField
+                        control={form.control}
+                        name="impactSummary"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Impact Summary</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        placeholder="What is the impact on the system?"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
+
                 <Separator />
 
-                <h3 className="font-bold">Supporting Information</h3>
+                {/* Supporting Information */}
+                <SectionTitle title="Supporting Information" />
                 <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        {/* Steps to reproduce */}
-                        <FormField
-                            control={form.control}
-                            name="stepsToReproduce"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Steps to reproduce</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="How can you reproduce the fault?"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                    {/* Steps to reproduce */}
+                    <FormField
+                        control={form.control}
+                        name="stepsToReproduce"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Steps to reproduce</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        placeholder="How can you reproduce the fault?"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
                     <div className="grid md:grid-cols-2 gap-2">
-                        <div className="grid gap-2">
-                            {/* Links and References */}
-                            <FormField
-                                control={form.control}
-                                name="relatedLinks"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Links and References (Optional)
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder="Enter links separated by commas or newlines"
-                                                onChange={handleLinkInputChange}
-                                                value={field.value}
-                                            />
-                                        </FormControl>
-                                        <div className="mt-2 flex flex-wrap gap-2">
-                                            {links.map((link, index) => (
-                                                <Badge
-                                                    key={index}
-                                                    variant="outline"
-                                                >
-                                                    {link}
-                                                </Badge>
-                                            ))}
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <div>
-                            {/* Tags */}
-                            <FormField
-                                control={form.control}
-                                name="tags"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Tags (Optional)</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder="Enter tags separated by commas or newlines"
-                                                onChange={handleTagInputChange}
-                                                value={field.value}
-                                            />
-                                        </FormControl>
-                                        <div className="mt-2 flex flex-wrap gap-2">
-                                            {tags.map((tag, index) => (
-                                                <Badge
-                                                    key={index}
-                                                    variant="outline"
-                                                >
-                                                    {tag}
-                                                </Badge>
-                                            ))}
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+                        {/* Links and References */}
+                        <FormItem>
+                            <FormLabel>
+                                Links and References (Optional)
+                            </FormLabel>
+                            <FormControl>
+                                <Textarea
+                                    placeholder="Enter links separated by commas or newlines"
+                                    value={linksInput}
+                                    onChange={handleLinksChange}
+                                />
+                            </FormControl>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                                {form
+                                    .watch('relatedLinks')
+                                    .map((link, index) => (
+                                        <Badge key={index} variant="outline">
+                                            {link}
+                                        </Badge>
+                                    ))}
+                            </div>
+                            <FormMessage />
+                        </FormItem>
+
+                        {/* Tags */}
+                        <FormItem>
+                            <FormLabel>Tags (Optional)</FormLabel>
+                            <FormControl>
+                                <Textarea
+                                    placeholder="Enter tags separated by commas or newlines"
+                                    value={tagsInput}
+                                    onChange={handleTagsChange}
+                                />
+                            </FormControl>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                                {form.watch('tags').map((tag, index) => (
+                                    <Badge key={index} variant="outline">
+                                        {tag}
+                                    </Badge>
+                                ))}
+                            </div>
+                            <FormMessage />
+                        </FormItem>
                     </div>
                 </div>
+
                 {/* Conditional Fields for Edit Mode */}
                 {mode === 'edit' && (
                     <>
                         <Separator />
-
-                        <h3 className="font-bold">Current Status</h3>
+                        <SectionTitle title="Current Status" />
                         <div className="grid md:grid-cols-2 gap-4">
-                            <div className="grid gap-2">
-                                {/* Incident Status */}
-                                <FormField
-                                    control={form.control}
-                                    name="status"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>
-                                                Incident Status
-                                            </FormLabel>
+                            {/* Incident Status */}
+                            <FormField
+                                control={form.control}
+                                name="status"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Incident Status</FormLabel>
+                                        <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
+                                                value={field.value}
                                             >
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select status" />
-                                                    </SelectTrigger>
-                                                </FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select status" />
+                                                </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="Open">
                                                         Open
@@ -408,35 +402,36 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
                                                     </SelectItem>
                                                 </SelectContent>
                                             </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Resolution Details */}
+                            {(form.watch('status') === 'Resolved' ||
+                                form.watch('status') === 'Closed') && (
+                                <FormField
+                                    control={form.control}
+                                    name="resolutionDetails"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Resolution Details
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="Describe the resolution"
+                                                    {...field}
+                                                />
+                                            </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                            </div>
-                            <div className="grid gap-2">
-                                {/* Resolution Details field - only visible if status is closed or resolved */}
-                                {form.watch('status') === 'Resolved' ||
-                                form.watch('status') === 'Closed' ? (
-                                    <FormField
-                                        control={form.control}
-                                        name="resolutionDetails"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>
-                                                    Resolution Details
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Textarea
-                                                        placeholder="Describe the resolution"
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                ) : null}
-                            </div>
+                            )}
+
+                            {/* Resolved At */}
                             <div className="grid gap-2">
                                 <FormLabel>Resolved At</FormLabel>
                                 <p className="text-sm">
@@ -468,4 +463,9 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
             </form>
         </Form>
     );
+
+    // Reusable SectionTitle component for better readability
+    function SectionTitle({ title }) {
+        return <h3 className="font-bold">{title}</h3>;
+    }
 }

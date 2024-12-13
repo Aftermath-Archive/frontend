@@ -33,7 +33,7 @@ export default function CreateIncidentForm() {
                     <div className="grid gap-2">
                         <Label htmlFor="password">Incident Description</Label>
                         {/* TO DO */}
-                        {/* text large */}
+                        {/* TEXT AREA COMPONENT */}
                         <Input
                             id="password"
                             type="password"
@@ -46,7 +46,7 @@ export default function CreateIncidentForm() {
                     <div className="grid gap-2">
                         <Label htmlFor="password">Severity Level</Label>
                         {/* TO DO */}
-                        {/* DROPDOWN */}
+                        {/* SELECT ELEMENT */}
                         {/* ['Low', 'Medium', 'High', 'Critical'] */}
                         <Input
                             id="password"
@@ -61,6 +61,8 @@ export default function CreateIncidentForm() {
                     <CardTitle className="text-xl">Metadata</CardTitle>
                     <div className="grid md:grid-cols-2 gap-2">
                         <div className="grid gap-2">
+                            {/* TO DO 
+                            DATE PICKER ELEMENT */}
                             <Label htmlFor="email">Date and Time</Label>
                             <Input
                                 id="Username"
@@ -74,7 +76,7 @@ export default function CreateIncidentForm() {
                         <div className="grid gap-2">
                             <Label htmlFor="email">Incident Environment</Label>
                             {/* TO DO */}
-                            {/* DROPDOWN */}
+                            {/* SELECT ELEMENT */}
                             {/* ['Production', 'Staging', 'Development'] */}
                             <Input
                                 id="Username"
@@ -104,9 +106,6 @@ export default function CreateIncidentForm() {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="email">Assigned Team</Label>
-                            {/* TO DO */}
-                            {/* DROPDOWN */}
-                            {/* ['Production', 'Staging', 'Development'] */}
                             <Input
                                 id="Username"
                                 type="username"
@@ -133,9 +132,7 @@ export default function CreateIncidentForm() {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="email">Impact Summary</Label>
-                            {/* TO DO */}
-                            {/* DROPDOWN */}
-                            {/* ['Production', 'Staging', 'Development'] */}
+                            {/* TO DO TEXTAREA COMPONENT */}
                             <Input
                                 id="Username"
                                 type="username"
@@ -153,6 +150,7 @@ export default function CreateIncidentForm() {
                     <div className="grid md:grid-cols-2 gap-2">
                         <div className="grid gap-2">
                             <Label htmlFor="email">Steps to Reproduce</Label>
+                            {/* TO DO TEXTAREA COMPONENT */}
                             <Input
                                 id="Username"
                                 type="username"
@@ -164,9 +162,6 @@ export default function CreateIncidentForm() {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="email">Links and References</Label>
-                            {/* TO DO */}
-                            {/* DROPDOWN */}
-                            {/* ['Production', 'Staging', 'Development'] */}
                             <Input
                                 id="Username"
                                 type="username"
@@ -178,9 +173,6 @@ export default function CreateIncidentForm() {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="email">Related Incidents</Label>
-                            {/* TO DO */}
-                            {/* DROPDOWN */}
-                            {/* ['Production', 'Staging', 'Development'] */}
                             <Input
                                 id="Username"
                                 type="username"
@@ -208,8 +200,7 @@ export default function CreateIncidentForm() {
                         <div className="grid gap-2">
                             <Label htmlFor="email">Incident ID</Label>
                             {/* TO DO */}
-                            {/* DROPDOWN */}
-                            {/* ['Production', 'Staging', 'Development'] */}
+                            {/* FIELD AUTO GENERATED + READ ONLY */}
                             <Input
                                 id="Username"
                                 type="username"

@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,36 +24,7 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 import { createIncident } from '../incident';
-
-// Validation Schema using Zod
-export const createIncidentSchema = z.object({
-    title: z.string().min(1, 'Title is required'),
-    description: z
-        .string()
-        .min(10, 'Description must be at least 10 characters')
-        .max(1000, 'Description cannot exceed 1000 characters'),
-    severity: z.enum(['Low', 'Medium', 'High', 'Critical']).default('Low'),
-    environment: z.enum(['Production', 'Staging', 'Development']),
-    affectedSystems: z
-        .string()
-        .min(2, 'Affected systems are required')
-        .max(1000, 'Affected systems cannot exceed 1000 characters'),
-    impactSummary: z
-        .string()
-        .min(10, 'Impact summary is required')
-        .max(1000, 'Impact summary cannot exceed 1000 characters'),
-    stepsToReproduce: z
-        .string()
-        .min(10, 'Steps to reproduce are required')
-        .max(1000, 'Steps to reproduce cannot exceed 1000 characters'),
-    assignedTo: z.string().optional().nullable(),
-    tags: z
-        .array(z.string())
-        .max(10, 'You can only add up to 10 tags')
-        .optional(),
-    relatedLinks: z.array(z.string().url('Invalid URL')).optional(),
-    relatedIncidents: z.array(z.string()).optional(),
-});
+import { createIncidentSchema } from '../incidentSchema';
 
 export default function CreateIncidentForm() {
     const navigate = useNavigate();
@@ -71,7 +41,7 @@ export default function CreateIncidentForm() {
             affectedSystems: '',
             impactSummary: '',
             stepsToReproduce: '',
-            assignedTo: null,
+            assignedTo: '',
             tags: [],
             relatedLinks: [],
             relatedIncidents: [],

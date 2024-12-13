@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
+import { createIncident } from '../incident';
 
 // Validation Schema using Zod
 export const createIncidentSchema = z.object({
@@ -59,26 +61,6 @@ export default function CreateIncidentForm() {
     const [links, setLinks] = useState([]);
     const [tags, setTags] = useState([]);
 
-    const handleLinkInputChange = (e) => {
-        const value = e.target.value;
-        // Split by commas or newlines and filter out empty strings
-        const linkArray = value
-            .split(/[\n,]+/)
-            .map((link) => link.trim())
-            .filter((link) => link !== '');
-        setLinks(linkArray);
-    };
-
-    const handleTagInputChange = (e) => {
-        const value = e.target.value;
-        // Split by commas or newlines and filter out empty strings
-        const tagArray = value
-            .split(/[\n,]+/)
-            .map((link) => link.trim())
-            .filter((link) => link !== '');
-        setTags(tagArray);
-    };
-
     const form = useForm({
         resolver: zodResolver(createIncidentSchema),
         defaultValues: {
@@ -96,29 +78,41 @@ export default function CreateIncidentForm() {
         },
     });
 
+    // Handler for parsing links
+    const handleLinkInputChange = (e) => {
+        const value = e.target.value;
+        const linkArray = value
+            .split(/[\n,]+/)
+            .map((link) => link.trim())
+            .filter((link) => link !== '');
+        setLinks(linkArray);
+        form.setValue('relatedLinks', linkArray);
+    };
+
+    // Handler for parsing tags
+    const handleTagInputChange = (e) => {
+        const value = e.target.value;
+        const tagArray = value
+            .split(/[\n,]+/)
+            .map((tag) => tag.trim())
+            .filter((tag) => tag !== '');
+        setTags(tagArray);
+        form.setValue('tags', tagArray);
+    };
+
+    // Submit handler
+    const [userJwt, setUserJwt] = useUserAuthContext();
+
     const onSubmit = async (data) => {
-        console.log('Form Data:', data);
         try {
-            // Convert the links string into an array before sending it to the backend
-            const linksArray = data['relatedLinks']
-                .split(/[\n,]+/)
-                .map((link) => link.trim())
-                .filter((link) => link !== '');
-
-            // Convert the tags string into an array before sending it to the backend
-            const tagsArray = data['tags']
-                .split(/[\n,]+/)
-                .map((tag) => tag.trim())
-                .filter((tag) => tag !== '');
-
             const payload = {
                 ...data,
-                links: linksArray,
-                tags: tagsArray,
+                relatedLinks: links,
+                tags: tags,
             };
+            console.log(payload);
 
-            // TO DO
-            // API request
+            await createIncident(payload, userJwt);
             toast.success('Incident created successfully!');
             navigate('/dashboard');
         } catch (error) {
@@ -320,7 +314,7 @@ export default function CreateIncidentForm() {
                     </div>
                     <div className="grid md:grid-cols-2 gap-2">
                         <div className="grid gap-2">
-                            {/* Links and References to external documentation */}
+                            {/* Links and References */}
                             <FormField
                                 control={form.control}
                                 name="relatedLinks"
@@ -332,12 +326,7 @@ export default function CreateIncidentForm() {
                                         <FormControl>
                                             <Textarea
                                                 placeholder="Enter links separated by commas or newlines"
-                                                onChange={(e) => {
-                                                    handleLinkInputChange(e);
-                                                    field.onChange(
-                                                        e.target.value
-                                                    );
-                                                }}
+                                                onChange={handleLinkInputChange}
                                                 value={field.value}
                                             />
                                         </FormControl>
@@ -357,7 +346,7 @@ export default function CreateIncidentForm() {
                             />
                         </div>
                         <div>
-                            {/* Tags for categorization */}
+                            {/* Tags */}
                             <FormField
                                 control={form.control}
                                 name="tags"
@@ -367,12 +356,7 @@ export default function CreateIncidentForm() {
                                         <FormControl>
                                             <Textarea
                                                 placeholder="Enter tags separated by commas or newlines"
-                                                onChange={(e) => {
-                                                    handleTagInputChange(e);
-                                                    field.onChange(
-                                                        e.target.value
-                                                    );
-                                                }}
+                                                onChange={handleTagInputChange}
                                                 value={field.value}
                                             />
                                         </FormControl>

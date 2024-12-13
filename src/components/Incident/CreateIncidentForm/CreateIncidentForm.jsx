@@ -71,7 +71,7 @@ export default function CreateIncidentForm() {
     };
 
     // Submit handler
-    const [userJwt, setUserJwt] = useUserAuthContext();
+    const [userJwt, _] = useUserAuthContext();
 
     const onSubmit = async (data) => {
         try {
@@ -80,7 +80,6 @@ export default function CreateIncidentForm() {
                 relatedLinks: links,
                 tags: tags,
             };
-            console.log(payload);
 
             await createIncident(payload, userJwt);
             toast.success('Incident created successfully!');

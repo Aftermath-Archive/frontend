@@ -1,10 +1,10 @@
-import CreateIncidentForm from '@/components/Incident/CreateIncidentForm/CreateIncidentForm';
+import IncidentForm from '@/components/Incident/IncidentForm/IncidentForm';
 import InAppLayout from '@/components/Layout/InAppLayout';
 
 export default function CreateIncidentPage() {
     return (
         <InAppLayout>
-            <CreateIncidentForm />
+            <IncidentForm mode="create" />
         </InAppLayout>
     );
 }

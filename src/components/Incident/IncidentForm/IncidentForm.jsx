@@ -24,7 +24,7 @@ import {
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
-import { createIncident } from '../incident';
+import { createIncident, updateIncident } from '../incident';
 import { incidentSchema } from '../incidentSchema';
 
 export default function IncidentForm({ initialData = {}, mode = 'create' }) {
@@ -72,6 +72,7 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
         if (mode === 'edit') {
             form.reset({
                 title: initialData.title || '',
+                incidentAutoId: initialData.incidentAutoId || '',
                 description: initialData.description || '',
                 severity: initialData.severity || 'Low',
                 environment: initialData.environment || 'Production',
@@ -90,7 +91,7 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
             setTagsInput(arrayToString(initialData.tags));
             setLinksInput(arrayToString(initialData.relatedLinks));
         }
-    }, [initialData, mode, form]);
+    }, [initialData, mode]);
 
     // Handlers for input changes
     const handleTagsChange = (e) => {
@@ -110,18 +111,17 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
     // Submit handler
     const onSubmit = async (data) => {
         try {
-            const payload = {
-                ...data,
-                // 'tags' and 'relatedLinks' are already arrays
-            };
-
-            await createIncident(payload, userJwt);
-            toast.success(
-                mode === 'edit'
-                    ? 'Incident updated successfully!'
-                    : 'Incident created successfully!'
-            );
-            navigate('/dashboard');
+            if (mode === 'create') {
+                const payload = { ...data };
+                const createdIncident = await createIncident(payload, userJwt);
+                toast.success('Incident created successfully!');
+                navigate(`/incidents/${createdIncident.id}`); // Navigate to the new incident's detail page
+            } else if (mode === 'edit') {
+                const payload = { ...data };
+                await updateIncident(incidentId, payload, userJwt);
+                toast.success('Incident updated successfully!');
+                navigate(`/incidents/${incidentId}`); // Navigate to the updated incident's detail page
+            }
         } catch (error) {
             console.error('Error saving data:', error);
             toast.error('Failed to save data.');

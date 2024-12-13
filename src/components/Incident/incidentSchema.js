@@ -1,4 +1,3 @@
-// src/schemas/incidentSchema.js
 import { z } from 'zod';
 
 export const incidentSchema = z.object({

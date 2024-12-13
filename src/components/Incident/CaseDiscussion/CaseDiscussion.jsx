@@ -4,7 +4,7 @@ import {
     CardDescription,
     CardTitle,
 } from '@/components/ui/card';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';

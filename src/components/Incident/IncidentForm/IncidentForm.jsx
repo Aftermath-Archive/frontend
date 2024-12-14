@@ -1,4 +1,4 @@
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -50,6 +50,12 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
         },
     });
 
+    /**
+     * The following helper functions are to handle the tags and links fields
+     * The form takes a textarea, but the backend expects an array of strings
+     * As such for any change we need to keep track of changes in the field with useState
+     * We then also need to convert from string -> arr[string] and vice versa
+     */
     // Separate state variables for input strings
     const [tagsInput, setTagsInput] = useState(
         initialData.tags ? initialData.tags.join(', ') : ''
@@ -66,6 +72,21 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
             .split(/[\n,]+/)
             .map((item) => item.trim())
             .filter((item) => item !== '');
+
+    // Handlers for input changes
+    const handleTagsChange = (e) => {
+        const inputValue = e.target.value;
+        setTagsInput(inputValue);
+        const tagsArray = stringToArray(inputValue);
+        form.setValue('tags', tagsArray);
+    };
+
+    const handleLinksChange = (e) => {
+        const inputValue = e.target.value;
+        setLinksInput(inputValue);
+        const linksArray = stringToArray(inputValue);
+        form.setValue('relatedLinks', linksArray);
+    };
 
     // Update form fields only in EDIT mode when initialData changes
     useEffect(() => {
@@ -92,21 +113,6 @@ export default function IncidentForm({ initialData = {}, mode = 'create' }) {
             setLinksInput(arrayToString(initialData.relatedLinks));
         }
     }, [initialData, mode]);
-
-    // Handlers for input changes
-    const handleTagsChange = (e) => {
-        const inputValue = e.target.value;
-        setTagsInput(inputValue);
-        const tagsArray = stringToArray(inputValue);
-        form.setValue('tags', tagsArray);
-    };
-
-    const handleLinksChange = (e) => {
-        const inputValue = e.target.value;
-        setLinksInput(inputValue);
-        const linksArray = stringToArray(inputValue);
-        form.setValue('relatedLinks', linksArray);
-    };
 
     // Submit handler
     const onSubmit = async (data) => {

@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { SearchForm } from '@/components/Sidebar/search-form';
-import { VersionSwitcher } from '@/components/Sidebar/version-switcher';
 import {
     Sidebar,
     SidebarContent,
@@ -17,7 +16,6 @@ import {
 
 // This is sample data.
 const data = {
-    versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
     navMain: [
         {
             title: 'Getting Started',

@@ -42,7 +42,7 @@ export const fetchIncidentById = async (id, jwt) => {
 export const updateIncident = async (id, payload, jwt) => {
     try {
         const response = await axios.put(
-            `${API_BASE_URL}/incidents/${id}`,
+            `${import.meta.env.VITE_API_URL}/incidents/${id}`,
             payload,
             {
                 headers: {
@@ -52,6 +52,44 @@ export const updateIncident = async (id, payload, jwt) => {
         );
 
         return response.data;
+    } catch (error) {
+        console.error('Error updating incident:', error);
+        throw error;
+    }
+};
+
+// To do add case discussion
+export const addCaseDiscussion = async (id, payload, jwt) => {
+    try {
+        const response = await axios.put(
+            `${import.meta.env.VITE_API_URL}/incidents/${id}`,
+            payload,
+            {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                },
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error('Error updating incident:', error);
+        throw error;
+    }
+};
+
+export const fetchUsernameFromId = async (id) => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/users/${id}`
+            // {
+            //     headers: {
+            //         Authorization: `Bearer ${jwt}`,
+            //     },
+            // }
+        );
+        const user = response.data.username;
+        return user;
     } catch (error) {
         console.error('Error updating incident:', error);
         throw error;

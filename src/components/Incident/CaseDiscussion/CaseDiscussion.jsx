@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { fetchUsernameFromId } from '../incident';
 
 export default function CaseDiscussionComponent({
     caseDiscussion = [],
@@ -24,6 +25,16 @@ export default function CaseDiscussionComponent({
         }
     };
 
+    const username = async (id) => {
+        try {
+            let response = await fetchUsernameFromId(id);
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.error('Error fetching username:', error);
+        }
+    };
+
     return (
         <div className="space-y-4">
             <h2 className="text-2xl font-semibold">Case Discussion</h2>
@@ -34,7 +45,9 @@ export default function CaseDiscussionComponent({
                     caseDiscussion.map((entry, index) => (
                         <Card key={index} className="p-4">
                             <CardTitle>
-                                {entry.authorName || 'Unknown User'}
+                                {/* to do */}
+                                {/* find username from userid */}
+                                {username(entry.author) || 'Unknown User'}
                             </CardTitle>
                             <CardDescription>
                                 {format(
@@ -60,8 +73,8 @@ export default function CaseDiscussionComponent({
                     onChange={(e) => setNewMessage(e.target.value)}
                     rows={3}
                 />
-                <Button className="mt-2" onClick={handleAddMessage}>
-                    Add Discussion
+                <Button className="mt-2 w-full" onClick={handleAddMessage}>
+                    Add Comment
                 </Button>
             </div>
         </div>

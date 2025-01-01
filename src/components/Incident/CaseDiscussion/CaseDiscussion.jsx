@@ -4,17 +4,18 @@ import {
     CardDescription,
     CardTitle,
 } from '@/components/ui/card';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { fetchUsernameFromId } from '../incident';
+import { fetchUsernameById } from '../incident';
 
 export default function CaseDiscussionComponent({
     caseDiscussion = [],
     onAddDiscussion,
 }) {
     const [newMessage, setNewMessage] = useState('');
+    const [usernames, setUsernames] = useState({});
 
     // TO DO
     // Handle adding a new discussion entry
@@ -25,15 +26,28 @@ export default function CaseDiscussionComponent({
         }
     };
 
-    const username = async (id) => {
-        try {
-            let response = await fetchUsernameFromId(id);
-            console.log(response);
-            return response;
-        } catch (error) {
-            console.error('Error fetching username:', error);
+    // Fetch usernames for each author in the discussion
+    useEffect(() => {
+        const fetchUsernames = async () => {
+            const uniqueAuthors = [
+                ...new Set(caseDiscussion.map((entry) => entry.author)),
+            ];
+            const usernameMap = {};
+
+            await Promise.all(
+                uniqueAuthors.map(async (authorId) => {
+                    const name = await fetchUsernameById(authorId);
+                    usernameMap[authorId] = name;
+                })
+            );
+
+            setUsernames(usernameMap);
+        };
+
+        if (caseDiscussion.length > 0) {
+            fetchUsernames();
         }
-    };
+    }, [caseDiscussion]);
 
     return (
         <div className="space-y-4">
@@ -45,9 +59,7 @@ export default function CaseDiscussionComponent({
                     caseDiscussion.map((entry, index) => (
                         <Card key={index} className="p-4">
                             <CardTitle>
-                                {/* to do */}
-                                {/* find username from userid */}
-                                {username(entry.author) || 'Unknown User'}
+                                {usernames[entry.author] || 'Unknown User'}
                             </CardTitle>
                             <CardDescription>
                                 {format(

@@ -2,6 +2,9 @@ import * as React from 'react';
 
 const MOBILE_BREAKPOINT = 768;
 
+/**
+ * this is a hook made for the Shadcn/UI Sidebar component
+ */
 export function useIsMobile() {
     const [isMobile, setIsMobile] = React.useState(undefined);
 

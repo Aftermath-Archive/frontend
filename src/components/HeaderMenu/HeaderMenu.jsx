@@ -56,7 +56,7 @@ export default function HeaderMenu() {
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     <a
-                        href="#"
+                        href="/auth/login"
                         className="text-sm/6 font-semibold text-gray-900"
                     >
                         Log in <span aria-hidden="true">&rarr;</span>
@@ -103,7 +103,7 @@ export default function HeaderMenu() {
                             </div>
                             <div className="py-6">
                                 <a
-                                    href="#"
+                                    href="/auth/login"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                                 >
                                     Log in

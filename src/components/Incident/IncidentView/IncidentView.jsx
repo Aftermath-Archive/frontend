@@ -5,17 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import CaseDiscussionComponent from '../CaseDiscussion/CaseDiscussion';
 
-export default function IncidentView({ incident }) {
+export default function IncidentView({ incident, onRefresh }) {
     const navigate = useNavigate();
 
     const handleEdit = () => {
-        navigate(`/incidents/${incident.id}/edit`);
+        navigate(`/incidents/${incident._id}/edit`);
     };
-
-    /**
-     * most of the fields should have default or required values, but conditional visibility is applied to hide fields with no data anyway
-     * this is to provide a better ux experience for historical data, or data added manually
-     */
 
     return (
         <div className="p-4 space-y-4">
@@ -67,7 +62,6 @@ export default function IncidentView({ incident }) {
                     <p>{incident.stepsToReproduce}</p>
                 </div>
             )}
-            {/* assigned to */}
             {incident.tags && (
                 <div>
                     <h2 className="text-xl font-semibold">Tags</h2>
@@ -112,7 +106,6 @@ export default function IncidentView({ incident }) {
             )}
             {incident.resolutionDetails && (
                 <div>
-                    {' '}
                     <h2 className="text-xl font-semibold">
                         Resolution Details
                     </h2>
@@ -122,7 +115,11 @@ export default function IncidentView({ incident }) {
             <Button className="w-full" onClick={handleEdit}>
                 Edit Incident
             </Button>
-            <CaseDiscussionComponent caseDiscussion={incident.caseDiscussion} />
+            <CaseDiscussionComponent
+                caseDiscussion={incident.caseDiscussion}
+                incidentId={incident._id}
+                onDiscussionAdded={onRefresh}
+            />
         </div>
     );
 }

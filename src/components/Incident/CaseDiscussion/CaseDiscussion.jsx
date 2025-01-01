@@ -8,21 +8,35 @@ import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { fetchUsernameById } from '../incident';
+import { addCaseDiscussion, fetchUsernameById } from '../incident';
+import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 
 export default function CaseDiscussionComponent({
     caseDiscussion = [],
+    incidentId,
     onAddDiscussion,
+    onDiscussionAdded,
 }) {
     const [newMessage, setNewMessage] = useState('');
     const [usernames, setUsernames] = useState({});
+    const [userJwt, _] = useUserAuthContext();
+    const author = userJwt;
 
-    // TO DO
     // Handle adding a new discussion entry
-    const handleAddMessage = () => {
+    const handleAddMessage = async () => {
         if (newMessage.trim()) {
-            onAddDiscussion(newMessage);
-            setNewMessage('');
+            try {
+                const discussionData = {
+                    message: newMessage.trim(),
+                    author: userJwt,
+                };
+
+                await addCaseDiscussion(incidentId, discussionData, userJwt);
+                setNewMessage('');
+                if (onDiscussionAdded) onDiscussionAdded();
+            } catch (error) {
+                console.error('Failed to add discussion:', error);
+            }
         }
     };
 

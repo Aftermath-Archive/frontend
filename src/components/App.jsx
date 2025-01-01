@@ -13,6 +13,7 @@ import ProtectedRoute from './Auth/ProtectedRoute';
 import CreateIncidentPage from '@/pages/Incidents/CreateIncident';
 import EditIncidentPage from '@/pages/Incidents/EditIncident';
 import ViewIncidentDetailPage from '@/pages/Incidents/ViewIncident';
+import SearchIncidentPage from '@/pages/Incidents/SearchIncident';
 
 const appRouter = createBrowserRouter([
     // Public routes
@@ -47,6 +48,10 @@ const appRouter = createBrowserRouter([
             {
                 path: '/incidents/:id/edit',
                 element: <EditIncidentPage />,
+            },
+            {
+                path: '/incidents/search',
+                element: <SearchIncidentPage />,
             },
         ],
     },

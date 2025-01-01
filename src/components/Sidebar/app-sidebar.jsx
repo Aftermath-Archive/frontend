@@ -1,13 +1,11 @@
 import * as React from 'react';
 
-import { SearchForm } from '@/components/Sidebar/search-form';
 import {
     Sidebar,
     SidebarContent,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
-    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -148,10 +146,6 @@ const data = {
 export function AppSidebar({ ...props }) {
     return (
         <Sidebar {...props}>
-            <SidebarHeader>
-                {/* <VersionSwitcher versions={data.versions} defaultVersion={data.versions[0]} /> */}
-                <SearchForm />
-            </SidebarHeader>
             <SidebarContent>
                 {/* We create a SidebarGroup for each parent. */}
                 {data.navMain.map((item) => (

@@ -7,9 +7,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LandingPage from '@/pages/LandingPage';
 import DashboardPage from '@/pages/Dashboard';
 import ErrorPage from '@/pages/ErrorPage';
-import RegisterPage from '@/pages/RegisterPage';
-import LoginPage from '@/pages/LoginPage';
+import RegisterPage from '@/pages/Auth/RegisterPage';
+import LoginPage from '@/pages/Auth/LoginPage';
 import ProtectedRoute from './Auth/ProtectedRoute';
+import CreateIncidentPage from '@/pages/Incidents/CreateIncident';
+import EditIncidentPage from '@/pages/Incidents/EditIncident';
+import ViewIncidentDetailPage from '@/pages/Incidents/ViewIncident';
+import SearchIncidentPage from '@/pages/Incidents/SearchIncident';
 
 const appRouter = createBrowserRouter([
     // Public routes
@@ -32,6 +36,22 @@ const appRouter = createBrowserRouter([
             {
                 path: '/dashboard',
                 element: <DashboardPage />,
+            },
+            {
+                path: '/incidents',
+                element: <CreateIncidentPage />,
+            },
+            {
+                path: '/incidents/:id/',
+                element: <ViewIncidentDetailPage />,
+            },
+            {
+                path: '/incidents/:id/edit',
+                element: <EditIncidentPage />,
+            },
+            {
+                path: '/incidents/search',
+                element: <SearchIncidentPage />,
             },
         ],
     },

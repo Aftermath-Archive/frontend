@@ -22,7 +22,7 @@ const IncidentCards = ({ table }) => {
                         <div className=" p-4 shadow-sm">
                             {/* Incident ID */}
                             <div className="flex justify-between mb-4">
-                                <span className="font-semibold">
+                                <span className="font-semibold px-2">
                                     Incident ID:
                                 </span>
                                 <span>{row.getValue('incidentAutoId')}</span>
@@ -30,21 +30,27 @@ const IncidentCards = ({ table }) => {
 
                             {/* Title */}
                             <div className="flex justify-between mb-2">
-                                <span className="font-semibold">Title:</span>
+                                <span className="font-semibold px-2">
+                                    Title:
+                                </span>
                                 <span>{row.getValue('title')}</span>
                             </div>
 
                             {/* Description */}
                             <div className="flex justify-between mb-2">
-                                <span className="font-semibold">
+                                <span className="font-semibold px-2">
                                     Description:
                                 </span>
-                                <span>{row.getValue('description')}</span>
+                                <span className="text-right	">
+                                    {row.getValue('description')}
+                                </span>
                             </div>
 
                             {/* Severity */}
                             <div className="flex justify-between mb-2">
-                                <span className="font-semibold">Severity:</span>
+                                <span className="font-semibold px-2">
+                                    Severity:
+                                </span>
                                 <span>
                                     <Badge>{row.getValue('severity')}</Badge>
                                 </span>
@@ -52,14 +58,16 @@ const IncidentCards = ({ table }) => {
 
                             {/* Status */}
                             <div className="flex justify-between mb-2">
-                                <span className="font-semibold">Status:</span>
+                                <span className="font-semibold px-2">
+                                    Status:
+                                </span>
                                 <span>
                                     <Badge>{row.getValue('status')}</Badge>
                                 </span>
                             </div>
 
                             {/* ActionCell */}
-                            <div className="flex justify-end mt-2">
+                            <div className="flex justify-end my-2">
                                 <ActionCell row={row} />
                             </div>
                         </div>

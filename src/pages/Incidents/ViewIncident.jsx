@@ -4,6 +4,7 @@ import IncidentView from '@/components/Incident/IncidentView/IncidentView';
 import InAppLayout from '@/components/Layout/InAppLayout';
 import { fetchIncidentById } from '../../components/Incident/incident';
 import { toast } from 'react-toastify';
+import LoadingSkeleton from '@/components/LoadingSkeleton/LoadingSkeleton';
 
 export default function ViewIncidentDetailPage() {
     const { id } = useParams();
@@ -12,34 +13,27 @@ export default function ViewIncidentDetailPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const getIncident = async () => {
-            try {
-                const data = await fetchIncidentById(id);
-                setIncidentData(data);
-            } catch (err) {
-                console.error('Error fetching incident:', err);
-                setError('Failed to fetch incident data.');
-                toast.error('Failed to fetch incident data.');
-            } finally {
-                setLoading(false);
-            }
-        };
+    const getIncident = async () => {
+        try {
+            const data = await fetchIncidentById(id);
+            setIncidentData(data);
+        } catch (err) {
+            console.error('Error fetching incident:', err);
+            setError('Failed to fetch incident data.');
+            toast.error('Failed to fetch incident data.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         getIncident();
     }, [id]);
 
     const memoizedIncidentData = useMemo(() => incidentData, [incidentData]);
 
     if (loading) {
-        return (
-            <InAppLayout>
-                <div className="flex justify-center items-center h-full">
-                    {/* to do */}
-                    {/* skeleton or spinner */}
-                </div>
-            </InAppLayout>
-        );
+        return <LoadingSkeleton />;
     }
 
     if (error) {
@@ -52,7 +46,10 @@ export default function ViewIncidentDetailPage() {
 
     return (
         <InAppLayout>
-            <IncidentView incident={memoizedIncidentData} />
+            <IncidentView
+                incident={memoizedIncidentData}
+                onRefresh={getIncident}
+            />
         </InAppLayout>
     );
 }

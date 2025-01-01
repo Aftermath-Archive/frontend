@@ -27,6 +27,17 @@ import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 import { createIncident, updateIncident } from '../incident';
 import { incidentSchema } from '../incidentSchema';
 
+/**
+ * A form component for creating or editing incident information. It includes fields for incident title, description, severity, environment, affected systems, impact summary, steps to reproduce, assigned team member, tags, related links, related incidents, status, and resolution details. The component handles input changes for tags and links. It also includes form submission logic for creating or updating incidents based on the mode ('create' or 'edit').
+ * @author Xander
+ *
+ * @export
+ * @param {{ initialData?: {}; mode?: string; incidentId: any; }} param0 The parameters for the IncidentForm function
+ * @param {{}} [param0.initialData={}]
+ * @param {string} [param0.mode='create']
+ * @param {*} param0.incidentId The ID of the incident
+ * @returns {*} A form component for creating or editing incident details. Handles form submission, input validation, and conversion between array and string fields.
+ */
 export default function IncidentForm({
     initialData = {},
     mode = 'create',

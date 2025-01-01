@@ -13,6 +13,13 @@ import IncidentCards from './IncidentCards';
 import useFetchIncidents from '@/hooks/useFetchIncidents';
 import { incidentColumns } from './Columns';
 
+/**
+ * A functional component for displaying a dynamic incident search table. It fetches incident data, handles local filtering based on search input, and renders a table with pagination. Includes functionality for sorting, column visibility, and refreshing incidents.Uses React hooks such as useState, useMemo, and custom hooks for table management. Responsible for rendering UI components like Input, Button, LoadingSkeleton, IncidentTable, and IncidentCards. Requires incidentColumns configuration and specific row models for the table.
+ * @author Xander
+ *
+ * @export
+ * @returns {*} A functional component for rendering an incident search table. It fetches incident data, allows searching and filtering, and displays the table with pagination features.
+ */
 export default function IncidentSearchTable() {
     const { fetchedData, loading, fetchIncidents } = useFetchIncidents();
     const [search, setSearch] = useState('');

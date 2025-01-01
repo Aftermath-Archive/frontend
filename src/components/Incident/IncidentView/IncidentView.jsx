@@ -5,6 +5,16 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import CaseDiscussionComponent from '../CaseDiscussion/CaseDiscussion';
 
+/**
+ * A React component that displays detailed information about an incident. It takes in an incident object and a function to trigger a refresh. The component renders the incident title, auto ID, description, severity, environment, affected systems, impact summary, steps to reproduce, tags, related links, status, resolved date, resolution details, and provides a button to edit the incident. It also includes a CaseDiscussionComponent for discussing the incident. The handleEdit function allows the user to navigate to the edit page for the incident.
+ * @author Xander
+ *
+ * @export
+ * @param {{ incident: any; onRefresh: any; }} param0 An object containing incident details
+ * @param {*} param0.incident Details of the incident
+ * @param {*} param0.onRefresh Function to refresh the incident details
+ * @returns {*} A React functional component that displays details of an incident including title, auto ID, description, severity, environment, affected systems, impact summary, steps to reproduce, tags, related links, status, resolved at, and resolution details. Allows the user to edit the incident and view case discussions. Requires the incident object and a refresh callback function as props.
+ */
 export default function IncidentView({ incident, onRefresh }) {
     const navigate = useNavigate();
 

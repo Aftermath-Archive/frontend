@@ -11,6 +11,18 @@ import { Button } from '@/components/ui/button';
 import { addCaseDiscussion, fetchUsernameById } from '../incident';
 import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 
+/**
+ * Component for displaying a case discussion with the ability to add new discussion entries. The component renders a list of discussion entries with author names, timestamps, and messages. It also includes a form for users to add new messages to the discussion. The component handles adding a new discussion entry, fetching usernames for each author in the discussion, and rendering the existing discussion entries.
+ * @author Xander
+ *
+ * @export
+ * @param {{ caseDiscussion?: {}; incidentId: any; onAddDiscussion: any; onDiscussionAdded: any; }} param0 An object containing parameters for the CaseDiscussionComponent function
+ * @param {{}} [param0.caseDiscussion=[]]
+ * @param {*} param0.incidentId The ID of the incident related to the case discussion
+ * @param {*} param0.onAddDiscussion A callback function to handle adding a new discussion entry
+ * @param {*} param0.onDiscussionAdded A callback function to be called after a discussion entry is added
+ * @returns {*} React component for displaying and adding case discussion entries
+ */
 export default function CaseDiscussionComponent({
     caseDiscussion = [],
     incidentId,

@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+/**
+ * A schema definition for an incident object. It includes properties such as title, description, severity, environment, affectedSystems, impactSummary, stepsToReproduce, assignedTo, tags, relatedLinks, relatedIncidents, status, and resolutionDetails. Some properties have specific validation rules such as min/max lengths and enum values. Certain properties are automatically set by backend or JWT. The schema is defined using the z.object() function from a library.
+ * @author Xander
+ *
+ * @type {*}
+ */
 export const incidentSchema = z.object({
     title: z.string().min(2, 'Title is required'),
     // incidentAutoId is set by backend

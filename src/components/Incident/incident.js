@@ -78,20 +78,14 @@ export const addCaseDiscussion = async (id, payload, jwt) => {
     }
 };
 
-export const fetchUsernameFromId = async (id) => {
+export const fetchUsernameById = async (id) => {
     try {
         const response = await axios.get(
             `${import.meta.env.VITE_API_URL}/users/${id}`
-            // {
-            //     headers: {
-            //         Authorization: `Bearer ${jwt}`,
-            //     },
-            // }
         );
-        const user = response.data.username;
-        return user;
+        return response.data.username;
     } catch (error) {
-        console.error('Error updating incident:', error);
-        throw error;
+        console.error(`Error fetching username for ID: ${id}`, error);
+        return 'Unknown User'; // Fallback for errors
     }
 };

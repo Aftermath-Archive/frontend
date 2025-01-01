@@ -4,7 +4,7 @@ import IncidentForm from '@/components/Incident/IncidentForm/IncidentForm';
 import InAppLayout from '@/components/Layout/InAppLayout';
 import { fetchIncidentById } from '@/components/Incident/incident';
 import { toast } from 'react-toastify';
-import CaseDiscussionComponent from '@/components/Incident/CaseDiscussion/CaseDiscussion';
+import LoadingSkeleton from '@/components/LoadingSkeleton/LoadingSkeleton';
 
 export default function EditIncidentPage() {
     const { id } = useParams(); // Extract the incident ID from the URL
@@ -34,13 +34,7 @@ export default function EditIncidentPage() {
     const memoizedInitialData = useMemo(() => incidentData, [incidentData]);
 
     if (loading) {
-        return (
-            <InAppLayout>
-                <div className="flex justify-center items-center h-full">
-                    <p>loading...</p>
-                </div>
-            </InAppLayout>
-        );
+        return <LoadingSkeleton />;
     }
 
     if (error) {
@@ -53,7 +47,11 @@ export default function EditIncidentPage() {
 
     return (
         <InAppLayout>
-            <IncidentForm initialData={memoizedInitialData} mode="edit" />
+            <IncidentForm
+                initialData={memoizedInitialData}
+                mode="edit"
+                incidentId={id}
+            />
         </InAppLayout>
     );
 }

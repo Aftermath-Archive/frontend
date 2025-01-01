@@ -95,28 +95,6 @@ export default function IncidentSearchTable() {
                 <IncidentTable table={table} columns={incidentColumns} />
                 <IncidentCards table={table} />
             </div>
-            {/* Pagination */}
-            <div className="flex justify-between items-center py-4">
-                <Button
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Previous
-                </Button>
-                <span className="text-sm">
-                    Page{' '}
-                    <strong>
-                        {table.getState().pagination.pageIndex + 1} of{' '}
-                        {table.getPageCount()}
-                    </strong>
-                </span>
-                <Button
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Next
-                </Button>
-            </div>
         </div>
     );
 }

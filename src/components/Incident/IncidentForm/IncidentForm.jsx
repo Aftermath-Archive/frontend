@@ -27,7 +27,11 @@ import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 import { createIncident, updateIncident } from '../incident';
 import { incidentSchema } from '../incidentSchema';
 
-export default function IncidentForm({ initialData = {}, mode = 'create' }) {
+export default function IncidentForm({
+    initialData = {},
+    mode = 'create',
+    incidentId,
+}) {
     const navigate = useNavigate();
     const [userJwt] = useUserAuthContext();
 

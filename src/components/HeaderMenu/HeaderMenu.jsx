@@ -59,7 +59,7 @@ export default function HeaderMenu() {
                         href="/auth/login"
                         className="text-sm/6 font-semibold text-gray-900"
                     >
-                        Log in <span aria-hidden="true">&rarr;</span>
+                        Log in for demo <span aria-hidden="true">&rarr;</span>
                     </a>
                 </div>
             </nav>
@@ -106,7 +106,7 @@ export default function HeaderMenu() {
                                     href="/auth/login"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                                 >
-                                    Log in
+                                    Log in for demo.
                                 </a>
                             </div>
                         </div>

@@ -22,6 +22,13 @@ export default function IncidentView({ incident, onRefresh }) {
         navigate(`/incidents/${incident._id}/edit`);
     };
 
+    const severityColors = {
+        Low: 'bg-green-100 text-green-800',
+        Medium: 'bg-yellow-100 text-yellow-800',
+        High: 'bg-orange-100 text-orange-800',
+        Critical: 'bg-red-100 text-red-800',
+    };
+
     return (
         <div className="p-4 space-y-4">
             {incident.title && (
@@ -43,7 +50,15 @@ export default function IncidentView({ incident, onRefresh }) {
             {incident.severity && (
                 <div>
                     <h2 className="text-xl font-semibold">Severity</h2>
-                    <Badge variant="outline">{incident.severity}</Badge>
+                    <Badge
+                        variant="outline"
+                        className={`${
+                            severityColors[incident.severity] ||
+                            'bg-gray-200 text-gray-800'
+                        }`}
+                    >
+                        {incident.severity}
+                    </Badge>
                 </div>
             )}
             {incident.environment && (

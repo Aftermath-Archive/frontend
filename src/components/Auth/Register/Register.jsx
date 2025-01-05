@@ -28,7 +28,7 @@ export default function Register() {
         try {
             await registerUser(email, username, password);
             toast.success('Account created successfully!');
-            navigate('/login'); // Redirect to login page after successful registration
+            navigate('/auth/login'); // Redirect to login page after successful registration
         } catch (err) {
             setError(err.message);
             console.error('Registration failed:', err);

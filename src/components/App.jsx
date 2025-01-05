@@ -14,6 +14,7 @@ import CreateIncidentPage from '@/pages/Incidents/CreateIncident';
 import EditIncidentPage from '@/pages/Incidents/EditIncident';
 import ViewIncidentDetailPage from '@/pages/Incidents/ViewIncident';
 import SearchIncidentPage from '@/pages/Incidents/SearchIncident';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 const appRouter = createBrowserRouter([
     // Public routes
@@ -63,10 +64,10 @@ const appRouter = createBrowserRouter([
 
 function App() {
     return (
-        <>
+        <ErrorBoundary>
             <RouterProvider router={appRouter} />
             <ToastContainer position="bottom-right" />
-        </>
+        </ErrorBoundary>
     );
 }
 

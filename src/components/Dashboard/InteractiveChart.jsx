@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useMemo, useState } from 'react';
 import {
     BarChart,
@@ -19,11 +17,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from '@/components/ui/chart';
+import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 
 import useFetchIncidents from '@/hooks/useFetchIncidents';
 import LoadingSkeleton from '../LoadingSkeleton/LoadingSkeleton';

@@ -17,6 +17,12 @@ https://aftermath-archive.xyz
 
 https://github.com/Aftermath-Archive/backend
 
+## Coder Academy
+
+For students, or teachers who are viewing this repo in the context of the Coder Academy final assignment I have created a separate branch 'project-submission' [available here.](https://github.com/Aftermath-Archive/frontend/tree/project-submission)
+
+This branch captures the projects state at time of submission while future work is undergone on the project.
+
 ## Deployment Guide
 
 This guide outlines the steps to deploy the frontend of the Aftermath Archive application to a production environment. The guide assumes you are using a modern hosting platform like Netlify, Vercel, or a custom hosting provider that supports static websites built with React/Vite.

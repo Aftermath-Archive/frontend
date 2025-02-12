@@ -17,6 +17,10 @@ https://aftermath-archive.xyz
 
 https://github.com/Aftermath-Archive/backend
 
+## Docker Compose Deployment Repo:
+
+https://github.com/Aftermath-Archive/docker-deployment
+
 ## Coder Academy
 
 For students, or teachers who are viewing this repo in the context of the Coder Academy final assignment I have created a separate branch 'project-submission' [available here.](https://github.com/Aftermath-Archive/frontend/tree/project-submission)
@@ -90,6 +94,50 @@ This will create a dist/ folder containing the optimized static files.
 1. Upload the contents of the dist/ folder to your custom hosting service (e.g., AWS S3, Firebase Hosting, or Nginx).
 2. Configure your web server to serve index.html for all routes (for React single-page applications).
 3. Add environment variables via the hosting provider’s dashboard (if applicable).
+
+##### Option 3: Docker
+
+##### Prerequisites
+
+1. Confirm Docker Installed
+   Download available for [Docker for Mac, Windows, and Linux.](https://docs.docker.com/get-started/get-docker/)
+
+2. Cloud Hosting (Optional)
+
+    If deploying to a cloud service, ensure you have an instance/server on platforms such as:
+
+    - AWS EC2
+    - Azure Virtual Machine
+    - Google Cloud Platform Compute Engine
+    - Digital Ocean
+    - Render
+    - Railway
+    - etc
+
+##### Deploy with Docker Image
+
+1. Build the Docker Image
+
+    Run the` following command in the root of the backend project:
+
+    ```
+    docker build -t aftermath-archive-frontend .
+    ```
+
+2. Run the container locally
+
+    To test the container on your local machine, run:
+
+    ```
+    docker run --env-file .env -p 8080:80 aftermath-archive-frontend
+    ```
+
+    - `--env-file .env`: Loads the environment variables from .env.
+    - `-p 8080:4000`: Maps port 80 of the container to 8080 on your local machine.
+
+#### Option 4: Docker Compose
+
+For easier setup, a `docker-compose.yml` file for both front and backend is [available here.](https://github.com/Aftermath-Archive/docker-deployment)
 
 #### 6. Test the Deployment
 

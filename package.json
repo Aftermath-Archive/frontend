@@ -7,7 +7,7 @@
         "build": "vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-        "prepare": "husky",
+        "prepare": "git rev-parse &>/dev/null && husky install || echo 'Not git repo skipping husky install'",
         "test": "vitest"
     },
     "dependencies": {

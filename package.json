@@ -38,6 +38,7 @@
         "recharts": "^2.15.0",
         "tailwind-merge": "^2.5.5",
         "tailwindcss-animate": "^1.0.7",
+        "vite": "^6.1.0",
         "zod": "^3.24.1"
     },
     "devDependencies": {
@@ -62,7 +63,6 @@
         "postcss": "^8.4.49",
         "prettier": "^3.4.1",
         "tailwindcss": "^3.4.15",
-        "vite": "^6.0.1",
         "vitest": "^2.1.8"
     },
     "lint-staged": {

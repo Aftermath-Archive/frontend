@@ -37,6 +37,9 @@ export default function Login() {
             const data = await loginUser(username, password);
             setUserJwt(data.token);
             toast.success('Logged in successfully!');
+            toast.warn(
+                'Accounts created on demo site are deleted every 24 hours.'
+            );
             navigate('/dashboard'); // Redirect to the app dashboard page after successful login
         } catch (err) {
             setError(err.message);

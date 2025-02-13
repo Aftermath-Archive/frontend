@@ -28,6 +28,9 @@ export default function Register() {
         try {
             await registerUser(email, username, password);
             toast.success('Account created successfully!');
+            toast.warn(
+                'Accounts created on demo site are deleted every 24 hours.'
+            );
             navigate('/auth/login'); // Redirect to login page after successful registration
         } catch (err) {
             setError(err.message);

@@ -136,11 +136,17 @@ export default function IncidentForm({
                 const payload = { ...data };
                 const createdIncident = await createIncident(payload, userJwt);
                 toast.success('Incident created successfully!');
+                toast.warn(
+                    'Incidents created on demo site are deleted every 24 hours.'
+                );
                 navigate(`/incidents/${createdIncident.id}`); // Navigate to the new incident's detail page
             } else if (mode === 'edit') {
                 const payload = { ...data };
                 await updateIncident(incidentId, payload, userJwt);
                 toast.success('Incident updated successfully!');
+                toast.warn(
+                    'Incidents updated on demo site are deleted every 24 hours.'
+                );
                 navigate(`/incidents/${incidentId}`); // Navigate to the updated incident's detail page
             }
         } catch (error) {

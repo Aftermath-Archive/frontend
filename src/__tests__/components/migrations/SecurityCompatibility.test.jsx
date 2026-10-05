@@ -3,6 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import useFetchIncidents from '@/hooks/useFetchIncidents';
 import { fetchUsernameById } from '@/components/Incident/incident';
+import { toast } from 'react-toastify';
 vi.mock('axios', () => ({ default: { get: vi.fn() } }));
 vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
 afterEach(() => {
@@ -10,6 +11,21 @@ afterEach(() => {
     vi.unstubAllGlobals();
 });
 describe('Secured backend compatibility', () => {
+    test('a backend that ignores pagination stops after its repeated page', async () => {
+        const batch = Array.from({ length: 100 }, (_, id) => ({
+            _id: String(id),
+        }));
+        const fetchMock = vi
+            .fn()
+            .mockResolvedValue({ ok: true, json: async () => batch });
+        vi.stubGlobal('fetch', fetchMock);
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        const { result } = renderHook(() => useFetchIncidents());
+        await waitFor(() => expect(result.current.loading).toBe(false));
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+        expect(result.current.fetchedData).toEqual([]);
+        expect(toast.error).toHaveBeenCalledWith('Failed to fetch incidents.');
+    });
     test('leaving the page aborts an unfinished incident load', () => {
         const fetchMock = vi.fn().mockReturnValue(new Promise(() => {}));
         vi.stubGlobal('fetch', fetchMock);

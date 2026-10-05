@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'react-toastify';
+import { logError } from '@/lib/logError';
 
 export default function Register() {
     const [email, setEmail] = useState('');
@@ -34,7 +35,7 @@ export default function Register() {
             navigate('/auth/login'); // Redirect to login page after successful registration
         } catch (err) {
             setError(err.message);
-            console.error('Registration failed:', err);
+            logError('auth.register', err);
             toast.error('Registration failed. Please try again.');
         } finally {
             setLoading(false);

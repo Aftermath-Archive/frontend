@@ -26,6 +26,7 @@ import { useEffect, useState } from 'react';
 import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 import { createIncident, updateIncident } from '../incident';
 import { incidentSchema } from '../incidentSchema';
+import { logError } from '@/lib/logError';
 
 function SectionTitle({ title }) {
     return <h3 className="font-bold">{title}</h3>;
@@ -152,7 +153,7 @@ export default function IncidentForm({
                 navigate(`/incidents/${incidentId}`); // Navigate to the updated incident's detail page
             }
         } catch (error) {
-            console.error('Error saving data:', error);
+            logError('incident.save', error);
             toast.error('Failed to save data.');
         }
     };

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'react-toastify';
+import { logError } from '@/lib/logError';
 
 // Preserve the existing client-side table while fetching bounded API pages.
 // Server-side table pagination/filtering is a separate performance migration.
@@ -44,7 +45,7 @@ const useFetchIncidents = () => {
             );
         } catch (error) {
             if (!controller.signal.aborted) {
-                console.error('Error fetching incidents:', error);
+                logError('archive.fetch', error);
                 toast.error('Failed to fetch incidents.');
             }
         } finally {

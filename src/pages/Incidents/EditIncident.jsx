@@ -5,6 +5,7 @@ import InAppLayout from '@/components/Layout/InAppLayout';
 import { fetchIncidentById } from '@/components/Incident/incident';
 import { toast } from 'react-toastify';
 import LoadingSkeleton from '@/components/LoadingSkeleton/LoadingSkeleton';
+import { logError } from '@/lib/logError';
 
 export default function EditIncidentPage() {
     const { id } = useParams(); // Extract the incident ID from the URL
@@ -18,7 +19,7 @@ export default function EditIncidentPage() {
                 const data = await fetchIncidentById(id);
                 setIncidentData(data);
             } catch (err) {
-                console.error('Error fetching incident:', err);
+                logError('incident.fetch', err);
                 setError('Failed to fetch incident data.');
                 toast.error('Failed to fetch incident data.');
             } finally {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { logError } from '@/lib/logError';
 
 export const registerUser = async (email, username, password) => {
     try {
@@ -12,7 +13,7 @@ export const registerUser = async (email, username, password) => {
         );
         return response.data;
     } catch (error) {
-        console.error('Registration failed:', error);
+        logError('auth.register', error);
         throw error;
     }
 };
@@ -28,7 +29,7 @@ export const loginUser = async (username, password) => {
         );
         return response.data;
     } catch (error) {
-        console.error('Login failed:', error);
+        logError('auth.login', error);
         throw error;
     }
 };

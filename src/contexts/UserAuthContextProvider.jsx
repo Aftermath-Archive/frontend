@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 export const UserAuthContext = createContext('');
 
@@ -8,7 +8,7 @@ export function useUserAuthContext() {
 
 export function UserAuthContextProvider({ children }) {
     // Initialize JWT state from localStorage
-    const [userJwt, setUserJwtState] = useState(() => {
+    const [userJwtState, setUserJwtState] = useState(() => {
         return localStorage.getItem('userJwt') || '';
     });
 
@@ -23,7 +23,7 @@ export function UserAuthContextProvider({ children }) {
     };
 
     return (
-        <UserAuthContext.Provider value={[userJwt, setUserJwt]}>
+        <UserAuthContext.Provider value={[userJwtState, setUserJwt]}>
             {children}
         </UserAuthContext.Provider>
     );

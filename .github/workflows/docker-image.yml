@@ -1,5 +1,11 @@
 name: Docker Image Pipeline
 
+permissions:
+    contents: read
+
+env:
+    HUSKY: '0'
+
 on:
     push:
         branches:
@@ -9,28 +15,64 @@ on:
             - main
 
 jobs:
+    validate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'npm'
+            - run: npm ci
+            - run: npm run lint
+            - run: npm run format:check
+            - run: npm run test:run
+            - run: npm run build
+            - name: Build production image
+              run: docker build --build-arg VITE_API_URL=http://localhost:8080 --tag aftermath-frontend:check .
+            - name: Verify NGINX configuration and SPA/asset routing
+              run: |
+                  docker run --rm aftermath-frontend:check nginx -t
+                  docker run --detach --name aftermath-web-check --publish 127.0.0.1:8081:80 aftermath-frontend:check
+                  trap 'docker rm --force aftermath-web-check' EXIT
+                  for attempt in $(seq 1 20); do
+                    if curl --fail --silent http://127.0.0.1:8081/ > /dev/null; then break; fi
+                    sleep 1
+                  done
+                  curl --fail --silent http://127.0.0.1:8081/incidents/example > /dev/null
+                  test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:8081/assets/missing.js)" = 404
+
     build-and-push:
+        needs: validate
+        if: github.event_name == 'push'
         runs-on: ubuntu-latest
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
 
             - name: Set up Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
               with:
-                  node-version: 20
+                  node-version-file: '.nvmrc'
                   cache: 'npm'
 
             - name: Install dependencies
-              run: npm install
+              run: npm ci
 
             - name: Log in to DockerHub
               run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
             - name: Build Docker Image
+              env:
+                  VITE_API_URL: ${{ vars.VITE_API_URL }}
               run: |
-                  docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/aftermath-archive-frontend:latest \
+                  docker build --build-arg VITE_API_URL="$VITE_API_URL" \
+                               -t ${{ secrets.DOCKERHUB_USERNAME }}/aftermath-archive-frontend:latest \
                                -t ${{ secrets.DOCKERHUB_USERNAME }}/aftermath-archive-frontend:${{ github.sha }} .
 
             - name: Push Docker Image to DockerHub

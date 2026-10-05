@@ -33,13 +33,13 @@ This guide outlines the steps to deploy the frontend of the Aftermath Archive ap
 
 ### Prerequisites
 
-1. Node.js: Ensure you have Node.js (version 16.x or higher) installed on your machine.
+1. Node.js: Ensure you have Node.js 26.x (use `nvm install` and `nvm use` with the included `.nvmrc`) installed on your machine.
 
-2. NPM/Yarn: A package manager like npm or yarn.
+2. npm: Use the included package-lock.json for reproducible installs.
 
 3. Frontend Source Code: Access to this GitHub repository containing the frontend code.
 
-4. Environment Variables: Make sure you have all necessary environment variables (e.g., API keys) defined for the build and runtime.
+4. Environment Variables: Set the public backend URL for the build using `VITE_API_URL`. Vite embeds `VITE_` variables in the browser bundle; keep private credentials and JWT signing secrets on the backend.
 
 ### Steps to Deploy
 
@@ -55,7 +55,7 @@ cd frontend
 Run the following command to install the required dependencies:
 
 ```
-npm install
+npm ci
 ```
 
 #### 3. Configure Environment Variables
@@ -67,6 +67,36 @@ VITE_API_URL=your-backend-api-url
 ```
 
 Note: Replace `your-backend-api-url` with actual values.
+
+### Development and validation
+
+Use `npm run dev` for development. Before committing, run `npm run lint`,
+`npm run format:check`, `npm run test:run`, `npm run build`, and `npm audit`.
+Git hooks use Husky 9 and lint-staged; CI and container builds disable hook
+installation using `HUSKY=0`.
+
+The baseline uses React 19, Vite 8, Tailwind 4, Vitest 5, Zod 4, Recharts 3,
+and TanStack Table 9. Tailwind uses its Vite plugin and the existing theme
+configuration; copied UI components remain project source code.
+
+The lint baseline uses ESLint 10 and `@eslint-react/eslint-plugin` 5 using
+the recommended JavaScript rules. The official React Hooks and React Refresh
+plugins remain configured. This replaces `eslint-plugin-react`, whose peer
+range does not support ESLint 10; ESLint 9 is end-of-life.
+
+TypeScript 6.0 is a development dependency required by the replacement plugin's
+internals. The current `@typescript-eslint/typescript-estree` peer range requires
+TypeScript below 6.1; the application remains JavaScript/JSX. Review that range
+before upgrading this tooling dependency to a new minor or major.
+
+The config defers the syntax-only `useContext`/context-provider codemods and
+keeps copied UI `forwardRef` wrappers. Repeated tag/link text badges retain index
+keys; editable tag/link text hydration has two documented effect exceptions.
+The official Hooks plugin owns Hooks ordering and dependency checks. DOM property,
+external-link and raw-HTML rules remain enforced as errors.
+
+Keep bounded dependency ranges; avoid `*`, `--force`, and `--legacy-peer-deps`
+when resolving this conflict.
 
 #### 4. Build the Application
 
@@ -121,7 +151,8 @@ This will create a dist/ folder containing the optimized static files.
     Run the` following command in the root of the backend project:
 
     ```
-    docker build -t aftermath-archive-frontend .
+    docker build --build-arg VITE_API_URL=https://your-backend-api-url \
+      -t aftermath-archive-frontend .
     ```
 
 2. Run the container locally
@@ -129,7 +160,7 @@ This will create a dist/ folder containing the optimized static files.
     To test the container on your local machine, run:
 
     ```
-    docker run --env-file .env -p 8080:80 aftermath-archive-frontend
+    docker run -p 8080:80 aftermath-archive-frontend
     ```
 
     - `--env-file .env`: Loads the environment variables from .env.
@@ -149,6 +180,14 @@ For easier setup, a `docker-compose.yml` file for both front and backend is [ava
 #### API Not Found Error:
 
 - Ensure VITE_API_URL is correctly set and accessible from the deployed environment.
+
+Docker builds require the public `VITE_API_URL` build argument. The main-branch
+image workflow reads it from the GitHub repository variable `VITE_API_URL`;
+configure that variable before publishing. NGINX serves the URL embedded at
+build time, so a container runtime `.env` does not change it. Private `.env`, Git
+metadata and key files are excluded from the build context. PR CI builds an image
+with a test URL and checks NGINX syntax, SPA deep links and missing-asset 404s.
+Hashed `/assets/` files use immutable caching; HTML is revalidated.
 
 #### 404 Error on Page Reload:
 

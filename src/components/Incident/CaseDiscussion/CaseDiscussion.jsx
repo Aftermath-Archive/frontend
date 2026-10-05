@@ -26,13 +26,11 @@ import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 export default function CaseDiscussionComponent({
     caseDiscussion = [],
     incidentId,
-    onAddDiscussion,
     onDiscussionAdded,
 }) {
     const [newMessage, setNewMessage] = useState('');
     const [usernames, setUsernames] = useState({});
-    const [userJwt, _] = useUserAuthContext();
-    const author = userJwt;
+    const [userJwt] = useUserAuthContext();
 
     // Handle adding a new discussion entry
     const handleAddMessage = async () => {
@@ -40,7 +38,6 @@ export default function CaseDiscussionComponent({
             try {
                 const discussionData = {
                     message: newMessage.trim(),
-                    author: userJwt,
                 };
 
                 await addCaseDiscussion(incidentId, discussionData, userJwt);
@@ -82,8 +79,15 @@ export default function CaseDiscussionComponent({
             {/* Render each discussion entry */}
             <div className="grid gap-4">
                 {caseDiscussion.length > 0 ? (
-                    caseDiscussion.map((entry, index) => (
-                        <Card key={index} className="p-4">
+                    caseDiscussion.map((entry) => (
+                        <Card
+                            key={
+                                entry._id ??
+                                entry.id ??
+                                `${entry.author}:${entry.timestamp}:${entry.message}`
+                            }
+                            className="p-4"
+                        >
                             <CardTitle>
                                 {usernames[entry.author] || 'Unknown User'}
                             </CardTitle>

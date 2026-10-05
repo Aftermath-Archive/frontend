@@ -1,4 +1,3 @@
-import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import ActionCell from './ActionCell';
 
@@ -19,7 +18,7 @@ const IncidentCards = ({ table }) => {
             {table.getRowModel().rows.length > 0 ? (
                 table.getRowModel().rows.map((row) => (
                     <div key={row.id} className="mb-4">
-                        <div className=" p-4 shadow-sm">
+                        <div className=" p-4 shadow-xs">
                             {/* Incident ID */}
                             <div className="flex justify-between mb-4">
                                 <span className="font-semibold px-2">

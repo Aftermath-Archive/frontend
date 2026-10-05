@@ -15,6 +15,7 @@ const useFetchIncidents = () => {
         try {
             const incidents = [];
             const limit = 100;
+            let previousPage;
             for (let page = 1; page <= 10000; page++) {
                 const endpoint = `${import.meta.env.VITE_API_URL}/incidents/?page=${page}&limit=${limit}`;
                 const response = await fetch(endpoint, {
@@ -26,6 +27,12 @@ const useFetchIncidents = () => {
                 if (controller.signal.aborted) return;
                 if (!Array.isArray(batch))
                     throw new Error('Invalid incident response.');
+                const pageContent = JSON.stringify(batch);
+                if (pageContent === previousPage)
+                    throw new Error(
+                        'The API did not advance to the next incident page.'
+                    );
+                previousPage = pageContent;
                 incidents.push(...batch);
                 if (batch.length < limit) {
                     if (!controller.signal.aborted) setFetchedData(incidents);

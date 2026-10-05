@@ -189,6 +189,12 @@ metadata and key files are excluded from the build context. PR CI builds an imag
 with a test URL and checks NGINX syntax, SPA deep links and missing-asset 404s.
 Hashed `/assets/` files use immutable caching; HTML is revalidated.
 
+Application error logs use `src/lib/logError.js`: fixed event messages and only
+validated HTTP status/allow-listed network codes. Request/response bodies,
+credentials, tokens, URLs, raw error messages and stacks are excluded. ESLint
+rejects direct console logging elsewhere in application source. Keep new error
+handlers on this path; rethrow errors or preserve existing UI fallbacks as needed.
+
 #### 404 Error on Page Reload:
 
 - Configure your server to fallback to index.html for non-root routes.

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { logError } from '@/lib/logError';
 
 /**
  * Asynchronously sends a POST request to the specified API endpoint with the provided incident data and JWT token. Returns the response data if the request is successful, otherwise logs an error and throws the encountered error.
@@ -22,7 +23,7 @@ export const createIncident = async (incidentData, jwt) => {
         );
         return response.data;
     } catch (error) {
-        console.error('Failed to save incident:', error);
+        logError('incident.create', error);
         throw error;
     }
 };
@@ -49,7 +50,7 @@ export const fetchIncidentById = async (id, jwt) => {
 
         return response.data;
     } catch (error) {
-        console.error('Error fetching incident:', error);
+        logError('incident.fetch', error);
         throw error;
     }
 };
@@ -83,7 +84,7 @@ export const updateIncident = async (id, payload, jwt) => {
 
         return response.data;
     } catch (error) {
-        console.error('Error updating incident:', error);
+        logError('incident.update', error);
         throw error;
     }
 };
@@ -106,7 +107,7 @@ export const fetchUsernameById = async (id, jwt) => {
         );
         return response.data.username;
     } catch (error) {
-        console.error(`Error fetching username for ID: ${id}`, error);
+        logError('user.fetch', error);
         return 'Unknown User'; // Fallback for errors
     }
 };
@@ -135,7 +136,7 @@ export const addCaseDiscussion = async (id, discussionData, jwt) => {
 
         return response.data; // Return the updated incident from the response
     } catch (error) {
-        console.error('Error adding case discussion:', error);
+        logError('discussion.create', error);
         throw error; // Throw the error to handle it in the calling component
     }
 };

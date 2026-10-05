@@ -1,5 +1,6 @@
 import React from 'react';
 import InAppLayout from '../Layout/InAppLayout';
+import { logError } from '@/lib/logError';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -11,8 +12,8 @@ class ErrorBoundary extends React.Component {
         return { hasError: true };
     }
 
-    componentDidCatch(error, errorInfo) {
-        console.error('Error caught in ErrorBoundary:', error, errorInfo);
+    componentDidCatch(error) {
+        logError('render.boundary', error);
     }
 
     render() {

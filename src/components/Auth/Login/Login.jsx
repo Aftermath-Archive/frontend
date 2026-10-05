@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'react-toastify';
 import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
+import { logError } from '@/lib/logError';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -43,7 +44,7 @@ export default function Login() {
             navigate('/dashboard'); // Redirect to the app dashboard page after successful login
         } catch (err) {
             setError(err.message);
-            console.error('Login failed:', err);
+            logError('auth.login', err);
             toast.error('Login failed. Please try again.');
         } finally {
             setLoading(false);

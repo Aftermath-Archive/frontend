@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { addCaseDiscussion, fetchUsernameById } from '../incident';
 import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
+import { logError } from '@/lib/logError';
 
 /**
  * Component for displaying a case discussion with the ability to add new discussion entries. The component renders a list of discussion entries with author names, timestamps, and messages. It also includes a form for users to add new messages to the discussion. The component handles adding a new discussion entry, fetching usernames for each author in the discussion, and rendering the existing discussion entries.
@@ -44,7 +45,7 @@ export default function CaseDiscussionComponent({
                 setNewMessage('');
                 if (onDiscussionAdded) onDiscussionAdded();
             } catch (error) {
-                console.error('Failed to add discussion:', error);
+                logError('discussion.create', error);
             }
         }
     };

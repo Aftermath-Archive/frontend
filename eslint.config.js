@@ -39,7 +39,8 @@ export default defineConfig([
                 { allowConstantExport: true },
             ],
             'no-unused-vars': 'warn',
-            'no-console': ['warn', { allow: ['warn', 'error'] }],
+            // Application diagnostics must pass through the sanitized logger.
+            'no-console': 'error',
         },
     },
     {
@@ -64,6 +65,10 @@ export default defineConfig([
         languageOptions: { globals: globals.node },
     },
     {
+        files: ['src/lib/logError.js'],
+        rules: { 'no-console': ['error', { allow: ['error'] }] },
+    },
+    {
         files: ['src/__tests__/**/*.{js,jsx}'],
         languageOptions: {
             globals: {
@@ -79,7 +84,10 @@ export default defineConfig([
                 vi: 'readonly',
             },
         },
-        rules: { 'react-refresh/only-export-components': 'off' },
+        rules: {
+            'react-refresh/only-export-components': 'off',
+            'no-console': ['error', { allow: ['warn', 'error'] }],
+        },
     },
     prettier,
 ]);

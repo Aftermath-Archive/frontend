@@ -27,6 +27,10 @@ import { useUserAuthContext } from '@/contexts/UserAuthContextProvider';
 import { createIncident, updateIncident } from '../incident';
 import { incidentSchema } from '../incidentSchema';
 
+function SectionTitle({ title }) {
+    return <h3 className="font-bold">{title}</h3>;
+}
+
 /**
  * A form component for creating or editing incident information. It includes fields for incident title, description, severity, environment, affected systems, impact summary, steps to reproduce, assigned team member, tags, related links, related incidents, status, and resolution details. The component handles input changes for tags and links. It also includes form submission logic for creating or updating incidents based on the mode ('create' or 'edit').
  * @author Xander
@@ -64,6 +68,7 @@ export default function IncidentForm({
             resolutionDetails: '',
         },
     });
+    const { reset } = form;
 
     /**
      * The following helper functions are to handle the tags and links fields
@@ -80,8 +85,6 @@ export default function IncidentForm({
     );
 
     // Helper functions to convert between array and string
-    const arrayToString = (arr) =>
-        arr && arr.length > 0 ? arr.join(', ') : '';
     const stringToArray = (str) =>
         str
             .split(/[\n,]+/)
@@ -106,7 +109,7 @@ export default function IncidentForm({
     // Update form fields only in EDIT mode when initialData changes
     useEffect(() => {
         if (mode === 'edit') {
-            form.reset({
+            reset({
                 title: initialData.title || '',
                 incidentAutoId: initialData.incidentAutoId || '',
                 description: initialData.description || '',
@@ -124,10 +127,13 @@ export default function IncidentForm({
             });
 
             // Initialize input strings based on initialData
-            setTagsInput(arrayToString(initialData.tags));
-            setLinksInput(arrayToString(initialData.relatedLinks));
+            // Hydrate the editable text representations alongside RHF's reset.
+            // eslint-disable-next-line @eslint-react/set-state-in-effect
+            setTagsInput(initialData.tags?.join(', ') || '');
+            // eslint-disable-next-line @eslint-react/set-state-in-effect
+            setLinksInput(initialData.relatedLinks?.join(', ') || '');
         }
-    }, [initialData, mode]);
+    }, [initialData, mode, reset]);
 
     // Submit handler
     const onSubmit = async (data) => {
@@ -219,30 +225,35 @@ export default function IncidentForm({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Severity Level</FormLabel>
-                                <FormControl>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        value={field.value}
-                                    >
-                                        <SelectTrigger>
+                                <Select
+                                    name={field.name}
+                                    value={field.value}
+                                    onValueChange={(value) => {
+                                        // Ignore the hidden native select's empty reset event.
+                                        if (value) field.onChange(value);
+                                    }}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger
+                                            ref={field.ref}
+                                            onBlur={field.onBlur}
+                                        >
                                             <SelectValue placeholder="Select severity" />
                                         </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="Low">
-                                                Low
-                                            </SelectItem>
-                                            <SelectItem value="Medium">
-                                                Medium
-                                            </SelectItem>
-                                            <SelectItem value="High">
-                                                High
-                                            </SelectItem>
-                                            <SelectItem value="Critical">
-                                                Critical
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Low">Low</SelectItem>
+                                        <SelectItem value="Medium">
+                                            Medium
+                                        </SelectItem>
+                                        <SelectItem value="High">
+                                            High
+                                        </SelectItem>
+                                        <SelectItem value="Critical">
+                                            Critical
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -255,27 +266,34 @@ export default function IncidentForm({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Incident Environment</FormLabel>
-                                <FormControl>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        value={field.value}
-                                    >
-                                        <SelectTrigger>
+                                <Select
+                                    name={field.name}
+                                    value={field.value}
+                                    onValueChange={(value) => {
+                                        // Ignore the hidden native select's empty reset event.
+                                        if (value) field.onChange(value);
+                                    }}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger
+                                            ref={field.ref}
+                                            onBlur={field.onBlur}
+                                        >
                                             <SelectValue placeholder="Select environment" />
                                         </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="Production">
-                                                Production
-                                            </SelectItem>
-                                            <SelectItem value="Staging">
-                                                Staging
-                                            </SelectItem>
-                                            <SelectItem value="Development">
-                                                Development
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Production">
+                                            Production
+                                        </SelectItem>
+                                        <SelectItem value="Staging">
+                                            Staging
+                                        </SelectItem>
+                                        <SelectItem value="Development">
+                                            Development
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -406,30 +424,38 @@ export default function IncidentForm({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Incident Status</FormLabel>
-                                        <FormControl>
-                                            <Select
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                            >
-                                                <SelectTrigger>
+                                        <Select
+                                            name={field.name}
+                                            value={field.value}
+                                            onValueChange={(value) => {
+                                                // Ignore the hidden native select's empty reset event.
+                                                if (value)
+                                                    field.onChange(value);
+                                            }}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger
+                                                    ref={field.ref}
+                                                    onBlur={field.onBlur}
+                                                >
                                                     <SelectValue placeholder="Select status" />
                                                 </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="Open">
-                                                        Open
-                                                    </SelectItem>
-                                                    <SelectItem value="In Progress">
-                                                        In Progress
-                                                    </SelectItem>
-                                                    <SelectItem value="Resolved">
-                                                        Resolved
-                                                    </SelectItem>
-                                                    <SelectItem value="Closed">
-                                                        Closed
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </FormControl>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="Open">
+                                                    Open
+                                                </SelectItem>
+                                                <SelectItem value="In Progress">
+                                                    In Progress
+                                                </SelectItem>
+                                                <SelectItem value="Resolved">
+                                                    Resolved
+                                                </SelectItem>
+                                                <SelectItem value="Closed">
+                                                    Closed
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -490,9 +516,4 @@ export default function IncidentForm({
             </form>
         </Form>
     );
-
-    // Reusable SectionTitle component for better readability
-    function SectionTitle({ title }) {
-        return <h3 className="font-bold">{title}</h3>;
-    }
 }

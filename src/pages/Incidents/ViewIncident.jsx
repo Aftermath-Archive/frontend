@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import IncidentView from '@/components/Incident/IncidentView/IncidentView';
 import InAppLayout from '@/components/Layout/InAppLayout';
 import { fetchIncidentById } from '../../components/Incident/incident';
@@ -8,12 +8,11 @@ import LoadingSkeleton from '@/components/LoadingSkeleton/LoadingSkeleton';
 
 export default function ViewIncidentDetailPage() {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [incidentData, setIncidentData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const getIncident = async () => {
+    const getIncident = useCallback(async () => {
         try {
             const data = await fetchIncidentById(id);
             setIncidentData(data);
@@ -24,11 +23,11 @@ export default function ViewIncidentDetailPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id]);
 
     useEffect(() => {
         getIncident();
-    }, [id]);
+    }, [getIncident]);
 
     const memoizedIncidentData = useMemo(() => incidentData, [incidentData]);
 

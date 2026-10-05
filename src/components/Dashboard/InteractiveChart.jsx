@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
     BarChart,
     Bar,
@@ -7,7 +7,6 @@ import {
     YAxis,
     Tooltip,
     Cell,
-    ResponsiveContainer,
 } from 'recharts';
 
 import {
@@ -69,11 +68,6 @@ export default function InteractiveChart() {
         }));
     }, [fetchedData, groupKey, currentColors]);
 
-    // Calculate total counts for each group
-    const total = useMemo(() => {
-        return chartData.reduce((acc, curr) => acc + curr.count, 0);
-    }, [chartData]);
-
     // Update chartConfig with dynamic group labels and colors
     const dynamicChartConfig = useMemo(() => {
         const config = {
@@ -132,60 +126,54 @@ export default function InteractiveChart() {
                         config={dynamicChartConfig}
                         className="min-w-full max-h-[400px]" // Adjust height as needed here
                     >
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart
-                                data={chartData}
-                                margin={{
-                                    top: 20,
-                                    right: 30,
-                                    left: 20,
-                                    bottom: 5,
-                                }}
+                        <BarChart
+                            data={chartData}
+                            margin={{
+                                top: 20,
+                                right: 30,
+                                left: 20,
+                                bottom: 5,
+                            }}
+                        >
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                vertical={false}
+                            />
+                            <XAxis
+                                dataKey="group"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={10}
+                                tickFormatter={(value) =>
+                                    dynamicChartConfig[value]?.label || value
+                                }
+                            />
+                            <YAxis
+                                allowDecimals={false}
+                                domain={[
+                                    0,
+                                    (dataMax) => Math.ceil(dataMax * 1.2),
+                                ]}
+                            />
+                            <Tooltip
+                                content={
+                                    <ChartTooltipContent
+                                        className="w-[150px]"
+                                        nameKey="count"
+                                        labelFormatter={(value) => value}
+                                    />
+                                }
+                            />
+                            <Bar
+                                dataKey="count"
+                                radius={[8, 8, 0, 0]}
+                                label={{ position: 'top' }}
                             >
-                                <CartesianGrid
-                                    strokeDasharray="3 3"
-                                    vertical={false}
-                                />
-                                <XAxis
-                                    dataKey="group"
-                                    tickLine={false}
-                                    axisLine={false}
-                                    tickMargin={10}
-                                    tickFormatter={(value) =>
-                                        dynamicChartConfig[value]?.label ||
-                                        value
-                                    }
-                                />
-                                <YAxis
-                                    allowDecimals={false}
-                                    domain={[
-                                        0,
-                                        (dataMax) => Math.ceil(dataMax * 1.2),
-                                    ]}
-                                />
-                                <Tooltip
-                                    content={
-                                        <ChartTooltipContent
-                                            className="w-[150px]"
-                                            nameKey="count"
-                                            labelFormatter={(value) => value}
-                                        />
-                                    }
-                                />
-                                <Bar
-                                    dataKey="count"
-                                    radius={[8, 8, 0, 0]}
-                                    label={{ position: 'top' }}
-                                >
-                                    {chartData.map((entry, index) => (
-                                        <Cell
-                                            key={`cell-${index}`}
-                                            fill={entry.fill}
-                                        />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
+                                {chartData.map((entry) => (
+                                    <Cell key={entry.group} fill={entry.fill} />
+                                ))}
+                            </Bar>
+                        </BarChart>
                     </ChartContainer>
                 )}
             </CardContent>

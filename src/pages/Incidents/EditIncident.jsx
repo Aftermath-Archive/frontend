@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import IncidentForm from '@/components/Incident/IncidentForm/IncidentForm';
 import InAppLayout from '@/components/Layout/InAppLayout';
 import { fetchIncidentById } from '@/components/Incident/incident';
@@ -8,7 +8,6 @@ import LoadingSkeleton from '@/components/LoadingSkeleton/LoadingSkeleton';
 
 export default function EditIncidentPage() {
     const { id } = useParams(); // Extract the incident ID from the URL
-    const navigate = useNavigate();
     const [incidentData, setIncidentData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

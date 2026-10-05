@@ -1,16 +1,18 @@
 # --- Stage 1: Build ---
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package.json package-lock.json ./
-RUN npm install
+RUN HUSKY=0 npm ci
 
 # Copy the entire project and build
 COPY . .
-RUN npm run build
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+RUN test -n "$VITE_API_URL" && npm run build
 
 # --- Stage 2: Serve ---
 FROM nginx:alpine

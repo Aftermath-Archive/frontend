@@ -1,9 +1,14 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
-    useReactTable,
-    getCoreRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
+    useTable,
+    tableFeatures,
+    columnVisibilityFeature,
+    rowPaginationFeature,
+    rowSortingFeature,
+    createPaginatedRowModel,
+    createSortedRowModel,
+    sortFn_alphanumeric,
+    sortFn_text,
 } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +17,15 @@ import IncidentTable from './IncidentTable';
 import IncidentCards from './IncidentCards';
 import useFetchIncidents from '@/hooks/useFetchIncidents';
 import { incidentColumns } from './Columns';
+
+const features = tableFeatures({
+    columnVisibilityFeature,
+    rowPaginationFeature,
+    rowSortingFeature,
+    paginatedRowModel: createPaginatedRowModel(),
+    sortedRowModel: createSortedRowModel(),
+    sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
+});
 
 /**
  * A functional component for displaying a dynamic incident search table. It fetches incident data, handles local filtering based on search input, and renders a table with pagination. Includes functionality for sorting, column visibility, and refreshing incidents.Uses React hooks such as useState, useMemo, and custom hooks for table management. Responsible for rendering UI components like Input, Button, LoadingSkeleton, IncidentTable, and IncidentCards. Requires incidentColumns configuration and specific row models for the table.
@@ -55,12 +69,10 @@ export default function IncidentSearchTable() {
         });
     }, [search, fetchedData]);
 
-    const table = useReactTable({
+    const table = useTable({
+        features,
         data: filteredData,
         columns: incidentColumns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
         state: {
             sorting,
             columnVisibility,

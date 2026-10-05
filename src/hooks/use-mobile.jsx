@@ -6,7 +6,11 @@ const MOBILE_BREAKPOINT = 768;
  * this is a hook made for the Shadcn/UI Sidebar component
  */
 export function useIsMobile() {
-    const [isMobile, setIsMobile] = React.useState(undefined);
+    const [isMobile, setIsMobile] = React.useState(() =>
+        typeof window === 'undefined'
+            ? false
+            : window.innerWidth < MOBILE_BREAKPOINT
+    );
 
     React.useEffect(() => {
         const mql = window.matchMedia(
@@ -16,7 +20,6 @@ export function useIsMobile() {
             setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
         };
         mql.addEventListener('change', onChange);
-        setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
         return () => mql.removeEventListener('change', onChange);
     }, []);
 

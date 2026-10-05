@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     DropdownMenu,
@@ -35,7 +35,7 @@ const ActionCell = ({ row }) => {
             <DropdownMenuTrigger asChild>
                 <Button
                     variant="ghost"
-                    className="h-8 w-8 p-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="h-8 w-8 p-0 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                     <MoreHorizontal />
                 </Button>

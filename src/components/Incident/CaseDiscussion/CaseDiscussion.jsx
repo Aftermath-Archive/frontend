@@ -59,7 +59,7 @@ export default function CaseDiscussionComponent({
 
             await Promise.all(
                 uniqueAuthors.map(async (authorId) => {
-                    const name = await fetchUsernameById(authorId);
+                    const name = await fetchUsernameById(authorId, userJwt);
                     usernameMap[authorId] = name;
                 })
             );
@@ -70,7 +70,7 @@ export default function CaseDiscussionComponent({
         if (caseDiscussion.length > 0) {
             fetchUsernames();
         }
-    }, [caseDiscussion]);
+    }, [caseDiscussion, userJwt]);
 
     return (
         <div className="space-y-4">

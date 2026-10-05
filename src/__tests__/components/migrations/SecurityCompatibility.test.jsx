@@ -10,6 +10,15 @@ afterEach(() => {
     vi.unstubAllGlobals();
 });
 describe('Secured backend compatibility', () => {
+    test('leaving the page aborts an unfinished incident load', () => {
+        const fetchMock = vi.fn().mockReturnValue(new Promise(() => {}));
+        vi.stubGlobal('fetch', fetchMock);
+        const { unmount } = renderHook(() => useFetchIncidents());
+        const signal = fetchMock.mock.calls[0][1].signal;
+        expect(signal.aborted).toBe(false);
+        unmount();
+        expect(signal.aborted).toBe(true);
+    });
     test('author lookups send a token and skip anonymous directory access', async () => {
         axios.get.mockResolvedValue({ data: { username: 'member' } });
         expect(await fetchUsernameById('user-id', 'access-token')).toBe(

@@ -23,6 +23,7 @@ const useFetchIncidents = () => {
                 if (!response.ok)
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 const batch = await response.json();
+                if (controller.signal.aborted) return;
                 if (!Array.isArray(batch))
                     throw new Error('Invalid incident response.');
                 incidents.push(...batch);
@@ -40,7 +41,11 @@ const useFetchIncidents = () => {
                 toast.error('Failed to fetch incidents.');
             }
         } finally {
-            if (activeRequestRef.current === controller) setLoading(false);
+            if (
+                activeRequestRef.current === controller &&
+                !controller.signal.aborted
+            )
+                setLoading(false);
         }
     }, []);
     useEffect(() => {

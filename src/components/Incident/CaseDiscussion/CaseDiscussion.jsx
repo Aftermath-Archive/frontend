@@ -51,7 +51,6 @@ export default function CaseDiscussionComponent({
 
     // Fetch usernames for each author in the discussion
     useEffect(() => {
-        let active = true;
         const fetchUsernames = async () => {
             const uniqueAuthors = [
                 ...new Set(caseDiscussion.map((entry) => entry.author)),
@@ -60,21 +59,18 @@ export default function CaseDiscussionComponent({
 
             await Promise.all(
                 uniqueAuthors.map(async (authorId) => {
-                    const name = await fetchUsernameById(authorId, userJwt);
+                    const name = await fetchUsernameById(authorId);
                     usernameMap[authorId] = name;
                 })
             );
 
-            if (active) setUsernames(usernameMap);
+            setUsernames(usernameMap);
         };
 
         if (caseDiscussion.length > 0) {
             fetchUsernames();
         }
-        return () => {
-            active = false;
-        };
-    }, [caseDiscussion, userJwt]);
+    }, [caseDiscussion]);
 
     return (
         <div className="space-y-4">

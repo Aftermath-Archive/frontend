@@ -13,7 +13,6 @@ on:
     pull_request:
         branches:
             - main
-            - feat/node-26-dependency-baseline
 
 jobs:
     validate:

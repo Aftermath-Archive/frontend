@@ -67,7 +67,7 @@ beforeEach(() => {
         loading: false,
         fetchIncidents: refreshIncidents,
     });
-    createIncident.mockResolvedValue({ _id: 'created' });
+    createIncident.mockResolvedValue({ id: 'created' });
     updateIncident.mockResolvedValue({ id: 'existing' });
 });
 

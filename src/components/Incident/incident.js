@@ -97,10 +97,12 @@ export const updateIncident = async (id, payload, jwt) => {
  * } id The ID of the user to fetch the username for
  * @returns {unknown} Async function that fetches the username of a user with the given ID. Returns the username if the fetch is successful, otherwise returns 'Unknown User'. Logs an error message if there is an error during the fetch.
  */
-export const fetchUsernameById = async (id) => {
+export const fetchUsernameById = async (id, jwt) => {
+    if (!jwt) return 'Unknown User';
     try {
         const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/users/${id}`
+            `${import.meta.env.VITE_API_URL}/users/${id}`,
+            { headers: { Authorization: `Bearer ${jwt}` } }
         );
         return response.data.username;
     } catch (error) {
